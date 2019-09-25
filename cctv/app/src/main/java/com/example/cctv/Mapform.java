@@ -107,6 +107,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
                     Log.e("mLat",String.valueOf(mLat));
                     Log.e("mLng",String.valueOf(mLng));
                     Addr_Point = address.get(0).getLocality();
+                    Log.e("에러",Addr_Point);
                     String str_Addr = address.get(0).getAddressLine(0);
                     Log.e("str_addr",str_Addr);
                     //Addr_Point = address.get(0).getLocality(); 구단위자르기
@@ -118,8 +119,8 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
                     //split_Addr = split_Addr.split("동")[0]+"동";
                    split_Addr = split_Addr.split("동")[0]+"동";
                    Log.e("str",st);*/
-                    split_Addr = address.get(0).getSubLocality();
-                    Log.e("split_Addr",split_Addr);
+                 /*   split_Addr = address.get(0).getSubLocality();
+                    Log.e("split_Addr",split_Addr);*/
 
                     if(Addr_Point.equals("화성시")||Addr_Point.equals("하남시")||Addr_Point.equals("고양시") ){
                         Toast.makeText(getActivity(),"화성시 , 하남시 , 고양시는 cctv 위치정보가 없습니다.",Toast.LENGTH_SHORT).show();
@@ -207,10 +208,11 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
     }
     public void MapsApi(GoogleMap Map) {
 
-        boolean pass = false;
+
         int Sum = 0;
         int cnt = 0;
-
+        boolean pass = false;
+        page = 1;
         try {
             ArrayList<MarkerItem> am = new ArrayList();
 
@@ -296,8 +298,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
             Map.moveCamera(CameraUpdateFactory.newLatLng(location));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
 
-            page = 1;
-            pass = false;
 
         } catch (JSONException e) {
             e.printStackTrace();
