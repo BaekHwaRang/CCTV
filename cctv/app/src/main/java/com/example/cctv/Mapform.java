@@ -109,18 +109,18 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
                     Addr_Point = address.get(0).getLocality();
                     Log.e("에러",Addr_Point);
                     String str_Addr = address.get(0).getAddressLine(0);
-                    Log.e("str_addr",str_Addr);
+                    Log.e("str_addr",""+str_Addr);
                     //Addr_Point = address.get(0).getLocality(); 구단위자르기
                  /*   String st = address.get(0).getCountryName()+" "+address.get(0).getAdminArea()+" "+address.get(0).getLocality()+" "+address.get(0).getSubLocality(); 동 자르기
                     Log.e("st"," "+st);
 
                     split_Addr = str_Addr.split(st)[1];
-                   Log.e("split_Addr",split_Addr);
+                   Log.e("split_Addr",""+split_Addr);
                     //split_Addr = split_Addr.split("동")[0]+"동";
                    split_Addr = split_Addr.split("동")[0]+"동";
-                   Log.e("str",st);*/
+                   Log.e("str",""+st);*/
                  /*   split_Addr = address.get(0).getSubLocality();
-                    Log.e("split_Addr",split_Addr);*/
+                    Log.e("split_Addr",""+split_Addr);*/
 
                     if(Addr_Point.equals("화성시")||Addr_Point.equals("하남시")||Addr_Point.equals("고양시") ){
                         Toast.makeText(getActivity(),"화성시 , 하남시 , 고양시는 cctv 위치정보가 없습니다.",Toast.LENGTH_SHORT).show();
