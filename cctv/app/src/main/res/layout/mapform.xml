@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/background_light"
-                android:gravity="center|center_vertical|fill_vertical"
+                android:gravity="center|center_vertical"
                 android:hint="주소를 입력하세요" />
 
             <Button
@@ -33,18 +33,30 @@
                 android:text="확인"
                 android:textColor="@android:color/background_light"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapview"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="560dp"
             map:cameraTargetLat="37.541"
             map:cameraTargetLng="126.986"
             map:cameraZoom="10"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="123dp" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
     </LinearLayout>
 

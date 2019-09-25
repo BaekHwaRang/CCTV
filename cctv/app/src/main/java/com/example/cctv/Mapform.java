@@ -28,6 +28,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -45,7 +46,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
+public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , GoogleMap.OnMarkerClickListener {
     View v;
     Geocoder geocoder;
     private MapView mapView = null; //
@@ -205,6 +206,8 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
         this.googleMap = googleMap;
         // MapsApi(googleMap);
 
+
+
     }
     public void MapsApi(GoogleMap Map) {
 
@@ -298,6 +301,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
             Map.moveCamera(CameraUpdateFactory.newLatLng(location));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
 
+            Map.setOnMarkerClickListener(this);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -308,7 +312,11 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
         }
 
     }
+    @Override
+    public boolean onMarkerClick(Marker marker) {
 
+        return false;
+    }
     private String jsonReadAll(Reader reader) throws IOException {
 
         StringBuilder sb = new StringBuilder();
@@ -328,6 +336,8 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable {
     public void run() {
 
     }
+
+
 
     public class ThreadURL extends Thread {
         @Override
