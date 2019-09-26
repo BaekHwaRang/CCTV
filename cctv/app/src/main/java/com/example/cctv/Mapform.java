@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -18,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,8 +50,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , GoogleMap.OnMarkerClickListener {
+public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
     View v;
     Geocoder geocoder;
     private MapView mapView = null; //
@@ -56,15 +62,16 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , 
     private final int END_PROGRESSDIALOG = 101;
     ProgressDialog progressDialog = null;
     ProgressDialogHandler handler =null;
+    LinearLayout bottom_sheet;
 
     Button Search;
     TextView Addr; // 지도 input info
+    TextView bottom_Text;
 
     String get_data = "";
     String Addr_Point = "";
     String split_Addr;
 
-    ProgressDialog pd;
     ThreadURL threadURL;
 
     int page = 1; // json 페이지 / 페이지당 요청수 1000개
@@ -88,9 +95,10 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , 
 
         Search = (Button) v.findViewById(R.id.map_addressButton);
         Addr = (TextView) v.findViewById(R.id.map_addressSearch);
+        bottom_Text = (TextView)v.findViewById(R.id.bottom_Text);
         handler = new ProgressDialogHandler(getActivity());
         mapView.getMapAsync(this);
-
+        bottom_sheet = (LinearLayout)v.findViewById(R.id.bottom_sheet);
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -291,6 +299,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , 
                 mop.position(location);
                 mop.title(am.get(i).getAddr());
 
+
                 //
                 Map.addMarker(mop);
                     /*Map.moveCamera(CameraUpdateFactory.newLatLng(location));
@@ -302,7 +311,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , 
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
 
             Map.setOnMarkerClickListener(this);
-
+            Map.setOnMapClickListener(this);
         } catch (JSONException e) {
             e.printStackTrace();
             e.getMessage();
@@ -313,9 +322,37 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , 
 
     }
     @Override
+    public void onMapClick(LatLng latLng) {
+        bottom_sheet("Hidden");
+    }
+    @Override
     public boolean onMarkerClick(Marker marker) {
+        bottom_sheet("View");
 
         return false;
+    }
+    public void bottom_sheet(final String msg){
+        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+
+                @Override
+                public void onStateChanged (@NonNull View view,int i){
+                    if(msg == "View") {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+                    }
+                    if(msg == "Hidden")
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+
+                @Override
+                public void onSlide (@NonNull View view,float v){
+
+                }
+
+
+
+        });
     }
     private String jsonReadAll(Reader reader) throws IOException {
 
@@ -336,9 +373,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable , 
     public void run() {
 
     }
-
-
-
     public class ThreadURL extends Thread {
         @Override
         public void run() {
