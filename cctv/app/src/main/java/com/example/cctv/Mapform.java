@@ -428,7 +428,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
                         progressDialog = new ProgressDialog(context);
                         progressDialog.setTitle("불러오는중");
                         progressDialog.setMessage("잠시만 기다려주세요...");
-
                     }
                     progressDialog.show();
                     break;

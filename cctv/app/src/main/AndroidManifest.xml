@@ -53,6 +53,7 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
+        <activity android:name=".Newsform"/>
 
         <service android:name=".ScreenService"/>
         <receiver android:name=".ScreenReceiver"/>

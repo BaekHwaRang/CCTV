@@ -81,7 +81,7 @@ public class Newsform extends AppCompatActivity implements View.OnClickListener{
 
         protected Long doInBackground(URL... urls) {
 
-            String url = "http://fs.jtbc.joins.com//RSS/newsflash.xml";
+            String url = "http://newssearch.naver.com/search.naver?where=rss&query=%EB%B2%94%EC%A3%84&field=0&nx_search_query=&nx_and_query=&nx_sub_query=&nx_search_hlquery=&is_dts=0";
 
             OkHttpClient client = new OkHttpClient();
 
@@ -187,18 +187,18 @@ public class Newsform extends AppCompatActivity implements View.OnClickListener{
                             News_list.get(i).setPubDate(parser.getText());
                             onPubDate = true;
                         }
-                        if (tagName.equals("author") && !onAuthor) {
-                            //News_list.get(i).setAuthor(parser.getText());
-                            onAuthor = true;
-                        }
-                        if (tagName.equals("link") && !onLink) {
-                            News_list.get(i).setLink(parser.getText());
-                            onLink = true;
-                        }
-                        if (tagName.equals("category") && !onCategory) {
-                            //News_list.get(i).setCategory(parser.getText());
-                            onCategory = true;
-                        }
+//                        if (tagName.equals("author") && !onAuthor) {
+//                            News_list.get(i).setAuthor(parser.getText());
+//                            onAuthor = true;
+//                        }
+//                        if (tagName.equals("link") && !onLink) {
+//                            News_list.get(i).setLink(parser.getText());
+//                            onLink = true;
+//                        }
+//                        if (tagName.equals("category") && !onCategory) {
+//                            News_list.get(i).setCategory(parser.getText());
+//                            onCategory = true;
+//                        }
                     } else if (eventType == XmlPullParser.END_TAG) {
                         if (tagName.equals("category") && onEnd == false) {
                             i++;
