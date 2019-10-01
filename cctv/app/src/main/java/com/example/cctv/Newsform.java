@@ -81,7 +81,7 @@ public class Newsform extends AppCompatActivity implements View.OnClickListener{
 
         protected Long doInBackground(URL... urls) {
 
-            String url = "http://newssearch.naver.com/search.naver?where=rss&query=%EB%B2%94%EC%A3%84&field=0&nx_search_query=&nx_and_query=&nx_sub_query=&nx_search_hlquery=&is_dts=0";
+            String url = "http://fs.jtbc.joins.com//RSS/newsflash.xml";
 
             OkHttpClient client = new OkHttpClient();
 
