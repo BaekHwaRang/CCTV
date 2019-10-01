@@ -64,7 +64,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
     String split_Addr;
 
     ThreadURL threadURL;
-
+    ArrayList<MarkerItem> am = new ArrayList();
     int page = 1; // json 페이지 / 페이지당 요청수 1000개
     double mLat;
     double mLng; // GeoCoding 검색된 주소 좌표 값
@@ -86,10 +86,8 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
 
         Search = (Button) v.findViewById(R.id.map_addressButton);
         Addr = (TextView) v.findViewById(R.id.map_addressSearch);
-        bottom_Text = (TextView)v.findViewById(R.id.bottom_Text);
         handler = new ProgressDialogHandler(getActivity());
         mapView.getMapAsync(this);
-        bottom_sheet = (LinearLayout)v.findViewById(R.id.bottom_sheet);
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,10 +102,10 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
 
                     mLat = address.get(0).getLatitude();
                     mLng = address.get(0).getLongitude();
-                    Log.e("mLat",String.valueOf(mLat));
-                    Log.e("mLng",String.valueOf(mLng));
+                    Log.e("mLat",""+String.valueOf(mLat));
+                    Log.e("mLng",""+String.valueOf(mLng));
                     Addr_Point = address.get(0).getLocality();
-                    Log.e("에러",Addr_Point);
+                    Log.e("에러",""+Addr_Point);
                     String str_Addr = address.get(0).getAddressLine(0);
                     Log.e("str_addr",""+str_Addr);
                     //Addr_Point = address.get(0).getLocality(); 구단위자르기
@@ -205,8 +203,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         this.googleMap = googleMap;
         // MapsApi(googleMap);
 
-
-
     }
     public void MapsApi(GoogleMap Map) {
 
@@ -216,7 +212,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         boolean pass = false;
         page = 1;
         try {
-            ArrayList<MarkerItem> am = new ArrayList();
+
 
             while(!pass) {
                 handler.sendEmptyMessage(START_PROGRESSDIALOG);
@@ -267,7 +263,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
                     }
                     else {
                         //if(addr.contains(split_Addr)){
-                        MarkerItem item = new MarkerItem(LAT, LOGT, addr, tel, Purpose, Installation, Storage, DataDate);
+                        MarkerItem item = new MarkerItem(LAT, LOGT, addr, tel, Purpose, Installation, Storage,s_CNT ,DataDate);
                         am.add(item);
                         //}
                     }
@@ -293,6 +289,8 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
 
                 //
                 Map.addMarker(mop);
+                Map.setOnMapClickListener(this);
+                Map.setOnMarkerClickListener(this);
                     /*Map.moveCamera(CameraUpdateFactory.newLatLng(location));
                     googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));*/
             }
@@ -301,8 +299,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
             Map.moveCamera(CameraUpdateFactory.newLatLng(location));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
 
-            Map.setOnMarkerClickListener(this);
-            Map.setOnMapClickListener(this);
         } catch (JSONException e) {
             e.printStackTrace();
             e.getMessage();
@@ -312,17 +308,35 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         }
 
     }
-    @Override
-    public void onMapClick(LatLng latLng) {
-        bottom_sheet("Hidden");
-    }
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        bottom_sheet("View");
 
-        return false;
-    }
-    public void bottom_sheet(final String msg){
+        @Override
+        public void onMapClick(LatLng latLng) {
+
+        }
+
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            //bottom_sheet("View");
+            String Marker_id = marker.getId();
+            Marker_id = Marker_id.split("m")[1];
+
+            String Marker_Info = "도로명 주소 : " +am.get(Integer.parseInt(Marker_id)).getAddr()+"\n"+
+                    "위도 , 경도 : "+ am.get(Integer.parseInt(Marker_id)).getLAT()+" , "+am.get(Integer.parseInt(Marker_id)).getLOGT()+"\n"+
+                    "CCTV 용도 : "+am.get(Integer.parseInt(Marker_id)).getPurpose()+"\n"+
+                    "설치년도 : "+am.get(Integer.parseInt(Marker_id)).getInstallation()+"\n"+
+                    "보관일수 : "+am.get(Integer.parseInt(Marker_id)).getStorage()+"\n"+
+                    "데이터 기준일자 : "+am.get(Integer.parseInt(Marker_id)).getDataDate()+"\n"+
+                    "CCTV 갯수 : "+am.get(Integer.parseInt(Marker_id)).getCNT()+"\n"+
+                    "전화번호 : "+am.get(Integer.parseInt(Marker_id)).getTel();
+
+            Toast.makeText(getActivity(), "" + Marker_Info, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+
+
+
+    /*public void bottom_sheet(final String msg){
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
 
@@ -344,7 +358,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
 
 
         });
-    }
+    }*/
     private String jsonReadAll(Reader reader) throws IOException {
 
         StringBuilder sb = new StringBuilder();

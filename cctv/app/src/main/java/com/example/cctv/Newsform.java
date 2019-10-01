@@ -188,7 +188,7 @@ public class Newsform extends AppCompatActivity implements View.OnClickListener{
                             onPubDate = true;
                         }
                         if (tagName.equals("author") && !onAuthor) {
-                            News_list.get(i).setAuthor(parser.getText());
+                            //News_list.get(i).setAuthor(parser.getText());
                             onAuthor = true;
                         }
                         if (tagName.equals("link") && !onLink) {
@@ -196,7 +196,7 @@ public class Newsform extends AppCompatActivity implements View.OnClickListener{
                             onLink = true;
                         }
                         if (tagName.equals("category") && !onCategory) {
-                            News_list.get(i).setCategory(parser.getText());
+                            //News_list.get(i).setCategory(parser.getText());
                             onCategory = true;
                         }
                     } else if (eventType == XmlPullParser.END_TAG) {

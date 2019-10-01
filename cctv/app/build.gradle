@@ -41,4 +41,5 @@ dependencies {
     //    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.4'
     implementation files('libs/naveridlogin_android_sdk_4.2.4.aar')
     implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+
 }

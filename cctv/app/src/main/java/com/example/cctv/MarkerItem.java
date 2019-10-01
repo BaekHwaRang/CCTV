@@ -9,8 +9,9 @@ public class MarkerItem {
     private  String Installation;
     private  String Storage;
     private  String DataDate;
+    private String CNT;
 
-    public MarkerItem(String LAT, String LOGT, String addr, String tel, String purpose, String installation, String storage, String dataDate) {
+    public MarkerItem(String LAT, String LOGT, String addr, String tel, String purpose, String installation, String storage,String cnt, String dataDate) {
         this.LAT = LAT;
         this.LOGT = LOGT;
         this.addr = addr;
@@ -19,6 +20,7 @@ public class MarkerItem {
         Installation = installation;
         Storage = storage;
         DataDate = dataDate;
+        this.CNT = cnt;
     }
 
     public String getLAT() {
@@ -84,4 +86,10 @@ public class MarkerItem {
     public void setDataDate(String dataDate) {
         DataDate = dataDate;
     }
+
+    public String getCNT() {
+        return CNT;
+    }
+
+    public void setCNT(String cnt) { CNT = cnt; }
 }
