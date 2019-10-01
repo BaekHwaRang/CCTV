@@ -55,26 +55,6 @@ public class Mainform extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.mainform, container, false);
-        safe_close = (Button) v.findViewById(R.id.safe_close);
-        safeLayout = (LinearLayout) v.findViewById(R.id.safeLayout);
-        safe_close.setOnClickListener(this);
-
-        news_close = (Button) v.findViewById(R.id.news_close);
-        newsLayout = (LinearLayout) v.findViewById(R.id.newsLayout);
-        news_close.setOnClickListener(this);
-
-        goVoteButton = (Button) v.findViewById(R.id.goVoteButton);
-        goVoteButton.setOnClickListener(this);
-
-        votePerText = (TextView) v.findViewById(R.id.votePerText);
-
-        /* 뉴스 */
-//        textView_News = (TextView)v.findViewById(R.id.newsText);
-        listView = (ListView) v.findViewById(R.id.listview);
-        ImageButton NewsRe = (ImageButton) v.findViewById(R.id.News_Re);
-        NewsRe.setOnClickListener(this);
-
-        new ReceiveNews().execute();
 
         return v;
     }
@@ -82,34 +62,6 @@ public class Mainform extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.safe_close:
-                if (safeClose == true) {
-                    safeLayout.setVisibility(View.GONE);
-                    safe_close.setText("▼");
-                    safeClose = false;
-                } else {
-                    safeLayout.setVisibility(View.VISIBLE);
-                    safe_close.setText("▲");
-                    safeClose = true;
-                }
-                break;
-            case R.id.news_close:
-                if (newsClose == true) {
-                    newsLayout.setVisibility(View.GONE);
-                    news_close.setText("▼");
-                    newsClose = false;
-                } else {
-                    newsLayout.setVisibility(View.VISIBLE);
-                    news_close.setText("▲");
-                    newsClose = true;
-                }
-                break;
-            case R.id.goVoteButton:
-                ((MainActivity)getActivity()).Vote(false);
-                break;
-            case R.id.News_Re:
-                new ReceiveNews().execute();
-                Toast.makeText(getActivity(), "뉴스 새로고침 완료!", Toast.LENGTH_SHORT).show();
         }
     }
 

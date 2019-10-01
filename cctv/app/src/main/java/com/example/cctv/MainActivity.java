@@ -98,10 +98,6 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.bottomnavigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
-        mainLayout = (ScrollView)findViewById(R.id.mainLayout);
-
-
     }
 
     @Override
