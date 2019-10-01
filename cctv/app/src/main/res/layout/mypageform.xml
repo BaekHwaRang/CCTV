@@ -173,7 +173,7 @@
                         android:layout_marginLeft="-5dp"
                         android:background="#2163B0"
                         android:gravity="center"
-                        android:text="투표 하러 가기"
+                        android:text="게시판 가기"
                         android:textColor="@android:color/background_light"
                         android:textSize="18sp"
                         android:textStyle="bold" />
