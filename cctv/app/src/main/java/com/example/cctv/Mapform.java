@@ -321,11 +321,11 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
             Marker_id = Marker_id.split("m")[1];
 
             String Marker_Info = "도로명 주소 : " +am.get(Integer.parseInt(Marker_id)).getAddr()+"\n"+
-                    "위도 , 경도 : "+ am.get(Integer.parseInt(Marker_id)).getLAT()+" , "+am.get(Integer.parseInt(Marker_id)).getLOGT()+"\n"+
+                    //"위도 , 경도 : "+ am.get(Integer.parseInt(Marker_id)).getLAT()+" , "+am.get(Integer.parseInt(Marker_id)).getLOGT()+"\n"+
                     "CCTV 용도 : "+am.get(Integer.parseInt(Marker_id)).getPurpose()+"\n"+
-                    "설치년도 : "+am.get(Integer.parseInt(Marker_id)).getInstallation()+"\n"+
-                    "보관일수 : "+am.get(Integer.parseInt(Marker_id)).getStorage()+"\n"+
-                    "데이터 기준일자 : "+am.get(Integer.parseInt(Marker_id)).getDataDate()+"\n"+
+                    //"설치년도 : "+am.get(Integer.parseInt(Marker_id)).getInstallation()+"\n"+
+                    //"보관일수 : "+am.get(Integer.parseInt(Marker_id)).getStorage()+"\n"+
+                    //"데이터 기준일자 : "+am.get(Integer.parseInt(Marker_id)).getDataDate()+"\n"+
                     "CCTV 갯수 : "+am.get(Integer.parseInt(Marker_id)).getCNT()+"\n"+
                     "전화번호 : "+am.get(Integer.parseInt(Marker_id)).getTel();
 
