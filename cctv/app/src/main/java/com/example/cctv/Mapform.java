@@ -4,33 +4,26 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -38,7 +31,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,7 +42,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
     View v;
@@ -335,20 +326,20 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
 
-                @Override
-                public void onStateChanged (@NonNull View view,int i){
-                    if(msg == "View") {
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-                    }
-                    if(msg == "Hidden")
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-
-                @Override
-                public void onSlide (@NonNull View view,float v){
+            @Override
+            public void onStateChanged (@NonNull View view,int i){
+                if(msg == "View") {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
                 }
+                if(msg == "Hidden")
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+
+            @Override
+            public void onSlide (@NonNull View view,float v){
+
+            }
 
 
 
