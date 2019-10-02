@@ -78,7 +78,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                 break;
             case R.id.voteLayout:
             case R.id.voteButton:
-                ((MainActivity)getActivity()).Vote(true);
+                Intent intent_board = new Intent(getActivity(),Boardform.class);
+                startActivity(intent_board);
                 break;
             case R.id.lockLayout:
             case R.id.lockAddButton:
