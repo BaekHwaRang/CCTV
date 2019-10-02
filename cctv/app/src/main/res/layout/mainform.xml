@@ -146,6 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.7"
+                android:background="@android:color/background_light"
                 android:orientation="vertical"></LinearLayout>
 
             <LinearLayout
@@ -153,6 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@android:color/background_light"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -265,6 +267,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:background="@android:color/background_light"
                 android:orientation="vertical"></LinearLayout>
         </LinearLayout>
     </LinearLayout>

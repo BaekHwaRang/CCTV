@@ -14,37 +14,6 @@
             android:layout_height="60dp"
             android:background="@android:color/background_light"
             android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView38"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="자동 로그인"
-                android:textColor="@android:color/black"
-                android:textStyle="normal|bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|right"
-                android:orientation="horizontal">
-
-                <Switch
-                    android:id="@+id/switch1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="2dp"
-            android:background="@android:color/background_light"
-            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -117,34 +86,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:text="01058741253"
-                android:textColor="@android:color/black" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/UserAddressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="2dp"
-            android:background="@android:color/background_light"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView36"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginBottom="1dp"
-                android:text="대표 주소"
-                android:textColor="#A8A8A8"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView37"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="주소를 등록해주세요"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 

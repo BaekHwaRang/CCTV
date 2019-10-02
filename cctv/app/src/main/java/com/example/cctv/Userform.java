@@ -23,9 +23,6 @@ public class Userform extends Fragment implements View.OnClickListener{
         LogoutButton = (Button)v.findViewById(R.id.LogoutButton);
         LogoutButton.setOnClickListener(this);
 
-        UserAddressLayout = (LinearLayout)v.findViewById(R.id.UserAddressLayout);
-        UserAddressLayout.setOnClickListener(this);
-
         return v;
     }
 
@@ -35,9 +32,6 @@ public class Userform extends Fragment implements View.OnClickListener{
             case R.id.LogoutButton:
                 ((MainActivity)getActivity()).Mypage();
 //                ((Mypageform)).LogoutClick();
-                break;
-            case R.id.UserAddressLayout:
-                ((MainActivity)getActivity()).AddressAdd();
                 break;
         }
     }

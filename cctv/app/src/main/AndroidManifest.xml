@@ -50,6 +50,7 @@
         <activity
             android:name=".LockScreenActivity"
             android:excludeFromRecents="true"
+            android:theme="@style/SplashTheme"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>

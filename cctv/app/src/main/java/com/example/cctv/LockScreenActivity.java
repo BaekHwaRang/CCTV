@@ -1,9 +1,14 @@
 package com.example.cctv;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -21,10 +26,11 @@ public class LockScreenActivity extends Activity implements View.OnLongClickList
 //    private final GestureDetector gestureDetector;
 //    public boolean result = false;
 
-    ImageButton callButton;
-    ImageButton bellButton;
+    Button callButton;
+    Button bellButton;
     public MediaPlayer mediaPlayer;
     Boolean noise = false;
+    @SuppressLint("WrongViewCast")
     @Override
 
     protected void onCreate(Bundle savedInstanceState){
@@ -38,12 +44,13 @@ public class LockScreenActivity extends Activity implements View.OnLongClickList
         callButton.setOnLongClickListener(this);
         bellButton.setOnLongClickListener(this);
 
+
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {
                 // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+                getWindow().setStatusBarColor(Color.parseColor("#F7E756"));
             }
         }else if (Build.VERSION.SDK_INT >= 21) {
             // 21 버전 이상일 때
@@ -79,6 +86,7 @@ public class LockScreenActivity extends Activity implements View.OnLongClickList
                 break;
             case R.id.bellButton:
                 noiseOn();
+                break;
         }
         return false;
     }
