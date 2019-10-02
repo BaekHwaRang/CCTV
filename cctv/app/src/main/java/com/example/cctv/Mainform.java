@@ -51,6 +51,8 @@ public class Mainform extends Fragment implements View.OnClickListener, View.OnL
         callLayout = (LinearLayout)v.findViewById(R.id.main2_112call);
         callLayout.setOnLongClickListener(this);
 
+        ((MainActivity)MainActivity.mContext).checkPermission();
+
         return v;
     }
 
@@ -58,11 +60,12 @@ public class Mainform extends Fragment implements View.OnClickListener, View.OnL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.boardButton:
-                Toast.makeText(getActivity(), "기능 추가중입니다ㅠ", Toast.LENGTH_LONG).show();
+                Intent intent_board = new Intent(getActivity(),Boardform.class);
+                startActivity(intent_board);
                 break;
             case R.id.newsButton:
-                Intent intent = new Intent(getActivity(),Newsform.class);
-                startActivity(intent);
+                Intent intent_news = new Intent(getActivity(),Newsform.class);
+                startActivity(intent_news);
                 break;
         }
     }

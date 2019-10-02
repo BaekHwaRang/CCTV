@@ -55,6 +55,8 @@
             android:launchMode="singleTask">
         </activity>
         <activity android:name=".Newsform"/>
+        <activity android:name=".Boardform"/>
+        <activity android:name=".Board_Writeform"/>
 
         <service android:name=".ScreenService"/>
         <receiver android:name=".ScreenReceiver"/>

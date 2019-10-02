@@ -38,7 +38,7 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View converView, ViewGroup parent) {
-        View view = mLayoutInflater.inflate(R.layout.listview_layout, null);
+        View view = mLayoutInflater.inflate(R.layout.news_listview_layout, null);
 
         TextView NewsTitle = (TextView)view.findViewById(R.id.NewsTitle);
         TextView NewsDs = (TextView)view.findViewById(R.id.NewsDs);
