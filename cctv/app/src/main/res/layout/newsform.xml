@@ -23,7 +23,7 @@
                     android:id="@+id/newsBar"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
-                    android:background="@drawable/line"
+                    android:background="#F9E958"
                     android:gravity="center"
                     android:orientation="horizontal">
 

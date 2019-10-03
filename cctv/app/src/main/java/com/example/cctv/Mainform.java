@@ -2,6 +2,8 @@ package com.example.cctv;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,12 +34,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Mainform extends Fragment implements View.OnClickListener, View.OnLongClickListener {
+import static android.content.Context.AUDIO_SERVICE;
+
+public class Mainform extends Fragment implements View.OnClickListener{
     View v;
 
     LinearLayout boardLayout;
     LinearLayout newsLayout;
     LinearLayout callLayout;
+    ImageButton bellButton;
+    public MediaPlayer mediaPlayer;
 
     @Nullable
     @Override
@@ -49,9 +55,12 @@ public class Mainform extends Fragment implements View.OnClickListener, View.OnL
         newsLayout = (LinearLayout)v.findViewById(R.id.newsButton);
         newsLayout.setOnClickListener(this);
         callLayout = (LinearLayout)v.findViewById(R.id.main2_112call);
-        callLayout.setOnLongClickListener(this);
+        callLayout.setOnClickListener(this);
 
         ((MainActivity)MainActivity.mContext).checkPermission();
+
+        bellButton = (ImageButton)v.findViewById(R.id.bellButton);
+        bellButton.setOnClickListener(this);
 
         return v;
     }
@@ -67,12 +76,16 @@ public class Mainform extends Fragment implements View.OnClickListener, View.OnL
                 Intent intent_news = new Intent(getActivity(),Newsform.class);
                 startActivity(intent_news);
                 break;
-        }
-    }
+            case R.id.bellButton:
+                if(mediaPlayer != null) noiseOn();
+                else
+                {
+                    mediaPlayer = MediaPlayer.create(getActivity(),R.raw.noise);
+                    mediaPlayer.setLooping(true);
+                    noiseOn();
+                }
+                break;
 
-    @Override
-    public boolean onLongClick(View v) {
-        switch (v.getId()) {
             case R.id.main2_112call:
                 Context c = v.getContext();
                 Intent intent = new Intent(Intent.ACTION_CALL);
@@ -85,6 +98,26 @@ public class Mainform extends Fragment implements View.OnClickListener, View.OnL
                 }
                 break;
         }
-        return false;
+    }
+
+
+    public void noiseOn(){
+        if(!mediaPlayer.isPlaying()) mediaPlayer.start();
+        else
+        {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // MediaPlayer 해지
+        if(mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }
