@@ -204,6 +204,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         // MapsApi(googleMap);
 
     }
+    boolean check = false;
     public void MapsApi(GoogleMap Map) {
 
 
@@ -215,17 +216,12 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
 
 
             while(!pass) {
-                handler.sendEmptyMessage(START_PROGRESSDIALOG);
                 threadURL = new ThreadURL();
                 threadURL.start();
-                Thread.sleep(1000);
-                while(true) {
-                    if(get_data != null) {
-                        break;
-                    }
-                }
-                JSONObject jsonObject = new JSONObject(get_data);
+                Thread.sleep(1500);
+                    JSONObject jsonObject = new JSONObject(get_data);
 
+                check = true;
                 JSONArray json_Arr = new JSONArray(jsonObject.getString("CCTV"));
                 JSONObject jsontemp = json_Arr.getJSONObject(1); // CCTV 태그 버리기는 용
 
@@ -294,7 +290,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
                     /*Map.moveCamera(CameraUpdateFactory.newLatLng(location));
                     googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));*/
             }
-            handler.sendEmptyMessage(END_PROGRESSDIALOG);
             LatLng location = new LatLng(mLat,mLng);
             Map.moveCamera(CameraUpdateFactory.newLatLng(location));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
@@ -302,9 +297,11 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         } catch (JSONException e) {
             e.printStackTrace();
             e.getMessage();
+            Log.e("ee","");
         } catch (Exception e) {
             e.printStackTrace();
             e.getMessage();
+            Log.e("dd","");
         }
 
     }
@@ -424,17 +421,23 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         public void handleMessage(Message msg) {
             switch(msg.what) {
                 case START_PROGRESSDIALOG:
-                    if(progressDialog == null) {
+                    /*if(progressDialog == null) {
                         progressDialog = new ProgressDialog(context);
                         progressDialog.setTitle("불러오는중");
                         progressDialog.setMessage("잠시만 기다려주세요...");
                     }
-                    progressDialog.show();
+                    progressDialog.show();*/
+                    if(!check){
+                    Mapform mp = new Mapform();
+                    mp.MapsApi(googleMap);
+                    }
+                    else
+                        check=false;
                     break;
                 case END_PROGRESSDIALOG:
-                    if(progressDialog != null) {
+                    /*if(progressDialog != null) {
                         progressDialog.dismiss();
-                    }
+                    }*/
                     break;
 
             }
