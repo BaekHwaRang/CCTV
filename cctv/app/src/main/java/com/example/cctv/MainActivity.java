@@ -43,13 +43,11 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.CALL_PHONE
     };
 
-    Fragment kakaofragment = null;
     Fragment loginfragment = null;
     Fragment mainfragment = null;
     Fragment mapfragment = null;
     Fragment my_addressfragment = null;
     Fragment mypagefragment = null;
-    Fragment naverfragment = null;
     Fragment userfragment = null;
     Fragment votefragment = null;
 
@@ -65,13 +63,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        kakaofragment = new KakaoLoginform();
-        loginfragment = new Loginform();
         mainfragment = new Mainform();
         mapfragment = new Mapform();
         my_addressfragment = new Mypage_Addressform();
         mypagefragment = new Mypageform();
-        naverfragment = new NaverLoginform();
         userfragment = new Userform();
         votefragment = new Vote_CCTVform();
 
@@ -237,24 +232,7 @@ public class MainActivity extends AppCompatActivity
             display = "login_select";
         }
     }
-    public void NaverLogin(){
-        if (naverfragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
-            ft.replace(R.id.content_main, naverfragment);
-            ft.commit();
-            display = "naver";
-        }
-    }
-    public void KakaoLogin(){
-        if (kakaofragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
-            ft.replace(R.id.content_main, kakaofragment);
-            ft.commit();
-            display = "kakao";
-        }
-    }
+
     public void AddressAdd(){
         if (my_addressfragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

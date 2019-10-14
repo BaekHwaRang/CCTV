@@ -37,26 +37,56 @@
                 android:id="@+id/mypage_login_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.1"
+                android:layout_weight="1"
                 android:background="#F9F99D"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="25dp">
 
                 <ImageView
                     android:id="@+id/imageView10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_weight="1.5"
+                    android:paddingBottom="10dp"
                     app:srcCompat="@drawable/user_icon" />
 
-                <TextView
-                    android:id="@+id/textView13"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="로그인 후 이용해주세요"
-                    android:textSize="20sp" />
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp">
+
+                    <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
+                        android:id="@+id/naverLoginButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/mypage_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="이름"
+                        android:textSize="20sp"
+                        android:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/naverLogoutButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/black"
+                        android:text="로그아웃"
+                        android:textColor="@android:color/background_light"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
