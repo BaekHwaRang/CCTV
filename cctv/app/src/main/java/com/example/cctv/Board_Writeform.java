@@ -58,10 +58,10 @@ public class Board_Writeform extends AppCompatActivity {
                 }
                 else {
                     FirebasePost post = new FirebasePost(Tv_title.getText().toString() , Tv_text.getText().toString());
-                    mContent.child("post_id").push().setValue(Tv_title.getText().toString());
+                    mContent.child("id_list").child("post_index").child("title").push().setValue(post);
                     Tv_title.setText("");
 
-                    mContent.child("post_id").push().setValue(Tv_text.getText().toString());
+                    mContent.child("id_list").child("post_index").child("text").push().setValue(post);
                     Tv_text.setText("");
                 }
 
