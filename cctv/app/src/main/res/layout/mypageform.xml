@@ -34,16 +34,16 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/mypage_login_layout"
+                android:id="@+id/mypage_logout_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="#F9F99D"
                 android:orientation="vertical"
-                android:padding="25dp">
+                android:padding="20dp"
+                android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/imageView10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
@@ -63,8 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:orientation="vertical">
 
                         <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
                             android:id="@+id/naverLoginButton"
@@ -72,6 +71,35 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1" />
                     </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mypage_login_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#F9F99D"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/userProfileImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    app:srcCompat="@drawable/user_icon" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="vertical"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp">
 
                     <LinearLayout
                         android:id="@+id/logoutLayout"
@@ -92,7 +120,7 @@
                         <Button
                             android:id="@+id/naverLogoutButton"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@android:color/black"
                             android:text="로그아웃"
@@ -146,9 +174,16 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="잠금화면 설정하기"
+                        android:text="잠금화면 사용하기"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                    <Switch
+                        android:id="@+id/lockSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:switchMinWidth="50dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -177,6 +212,18 @@
                         android:text="순찰 강화 신청"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="▶"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
                 </LinearLayout>
             </LinearLayout>
 

@@ -105,9 +105,9 @@ public class MainActivity extends AppCompatActivity
         else if(display=="login_select"||display=="vote"||display=="user_info"){
             Mypage();
         }
-        else if(display=="address"){
-            UserInfo();
-        }
+//        else if(display=="address"){
+//            UserInfo();
+//        }
         else if(display !="home"){
             bottomNavigationView.setSelectedItemId(R.id.navigation_home);
             Mainpage();
@@ -233,36 +233,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void AddressAdd(){
-        if (my_addressfragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
-            ft.replace(R.id.content_main, my_addressfragment);
-            ft.commit();
-            display = "address";
-        }
-    }
-
-    public void Vote(boolean vote){
-        if (votefragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
-            ft.replace(R.id.content_main, votefragment);
-            ft.commit();
-            if (vote == true) display = "vote";
-            else if (vote == false) display = "vote2";
-        }
-    }
-
-    public void UserInfo(){
-        if (userfragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
-            ft.replace(R.id.content_main, userfragment);
-            ft.commit();
-            display = "user_info";
-        }
-    }
+//    public void UserInfo(){
+//        if (userfragment != null) {
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
+//            ft.replace(R.id.content_main, userfragment);
+//            ft.commit();
+//            display = "user_info";
+//        }
+//    }
     public void Map(){
         if (mapfragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
