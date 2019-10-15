@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "844507318260-f4kim9n52o9la9allhng8ou3cdf2obka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cctv",
+            "certificate_hash": "9d6622d0a92319437121fcee9fa186354e158a37"
+          }
+        },
+        {
           "client_id": "844507318260-i5sm1gnuj1b3jjs9pun1i5jtmtrrdmm0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

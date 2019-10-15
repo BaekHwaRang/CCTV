@@ -1,18 +1,26 @@
 package com.example.cctv;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +29,12 @@ public class Board_Writeform extends AppCompatActivity {
     ImageButton Subject;
     TextView Tv_title;
     TextView Tv_text;
+    Map<String , Object> childUpdate = new HashMap<>();
+    Map<String , Object> postValues = null;
+
+    long maxid=0;
     @Override
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board_writeform);
@@ -46,9 +59,8 @@ public class Board_Writeform extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference mContent = mDatabase.getReference();
-                Map<String , Object> childUpdate = new HashMap<>();
-                Map<String , Object> postValues = null;
+                final DatabaseReference mContent = mDatabase.getReference();
+
 
                 if(Tv_title.getText()==null || Tv_title.getText().length()==0){
                     Toast.makeText(Board_Writeform.this, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
@@ -57,13 +69,55 @@ public class Board_Writeform extends AppCompatActivity {
                     Toast.makeText(Board_Writeform.this, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    FirebasePost post = new FirebasePost(Tv_title.getText().toString() , Tv_text.getText().toString());
-                    mContent.child("id_list").child("post_index").child("title").push().setValue(post);
-                    Tv_title.setText("");
+                    mContent.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            if(dataSnapshot.exists()){
+                                maxid=(dataSnapshot.getChildrenCount());
+                            }
+                            long id = maxid+1;
+                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString() , Tv_text.getText().toString());
+                            postValues = post.toMap();
+                            Log.e("id ", "_"+id);
+                            Log.e("title ", "_"+Tv_title.getText().toString());
+                            Log.e("text ", "_"+Tv_text.getText().toString());
 
-                    mContent.child("id_list").child("post_index").child("text").push().setValue(post);
-                    Tv_text.setText("");
+                            childUpdate.put("/id_list/"+id,postValues);
+
+                            // childUpdate.put("/post_index/"+Tv_title.getText().toString(),postValues);
+
+                            mContent.updateChildren(childUpdate);
+
+                            Tv_title.setText("");
+                            Tv_text.setText("");
+
+                            Intent intent = new Intent(getApplicationContext(),Boardform.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
+
+
 
             }
         });

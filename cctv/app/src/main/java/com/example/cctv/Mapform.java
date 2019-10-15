@@ -216,11 +216,12 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
 
 
             while(!pass) {
+                handler.sendEmptyMessage(START_PROGRESSDIALOG);
                 threadURL = new ThreadURL();
                 threadURL.start();
                 Thread.sleep(1500);
                     JSONObject jsonObject = new JSONObject(get_data);
-
+                handler.sendEmptyMessage(END_PROGRESSDIALOG);
                 check = true;
                 JSONArray json_Arr = new JSONArray(jsonObject.getString("CCTV"));
                 JSONObject jsontemp = json_Arr.getJSONObject(1); // CCTV 태그 버리기는 용
@@ -428,8 +429,9 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
                     }
                     progressDialog.show();*/
                     if(!check){
-                    Mapform mp = new Mapform();
-                    mp.MapsApi(googleMap);
+                   /* Mapform mp = new Mapform();
+                    mp.MapsApi(googleMap);*/
+                   Toast.makeText(getActivity(),"다시 입력해주세요.",Toast.LENGTH_SHORT).show();
                     }
                     else
                         check=false;

@@ -7,34 +7,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirebasePost {
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    private String id;
+    private long id;
     private String text;
+    private String title;
+    public FirebasePost(){
 
-    public FirebasePost(String id , String text){
+    }
+    public FirebasePost(long id ,String title, String text){
         this.id = id;
         this.text = text;
+        this.title = title;
     }
 @Exclude
     public Map<String , Object> toMap(){
         HashMap<String , Object> result = new HashMap<>();
-        result.put("id",id);
-        result.put("text",text);
+        result.put("post_index",id);
+        result.put("post_title",title);
+        result.put("post_text",text);
         return result;
     }
 }
