@@ -23,6 +23,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.boardform);
 
+        listView = (ListView) findViewById(R.id.post_lv);
         boardWriteButton = (ImageButton)findViewById(R.id.board_writeButton);
         boardWriteButton.setOnClickListener(this);
 

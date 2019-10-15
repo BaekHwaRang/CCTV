@@ -1,6 +1,6 @@
 package com.example.cctv;
 
-public class News {
+public class News{
     private String title;//기사 제목
     private String link;  // 기사 링크
     private String description; //본문내용
