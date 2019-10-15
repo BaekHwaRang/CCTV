@@ -8,11 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class Boardform extends AppCompatActivity implements View.OnClickListener {
 
+    ListView listView;
     ImageButton boardWriteButton;
     ArrayList<BoardList> Board_list = new ArrayList<BoardList>();
 
