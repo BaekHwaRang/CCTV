@@ -103,7 +103,7 @@
                 android:layout_weight="1"
                 android:ems="15"
                 android:hint="댓글을 입력해주세요"
-                android:inputType="textPersonName" />
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/button6"

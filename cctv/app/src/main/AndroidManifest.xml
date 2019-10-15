@@ -59,7 +59,9 @@
         <activity android:name=".Newsform"/>
         <activity android:name=".Boardform"/>
         <activity android:name=".Board_Writeform"/>
-        <activity android:name=".Board_Readform"/>
+        <activity
+            android:name=".Board_Readform"
+            android:windowSoftInputMode="adjustPan"/>
 
         <service android:name=".ScreenService"/>
         <receiver android:name=".ScreenReceiver"/>

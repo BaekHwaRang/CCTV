@@ -57,6 +57,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
 
 
 
+
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {

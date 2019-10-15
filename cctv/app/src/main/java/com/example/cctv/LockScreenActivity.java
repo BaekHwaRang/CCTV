@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class LockScreenActivity extends Activity implements View.OnClickListener {
@@ -26,8 +27,10 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
 //    private final GestureDetector gestureDetector;
 //    public boolean result = false;
 
-    Button callButton;
-    Button bellButton;
+    ImageView deco;
+    ImageView deco2;
+    ImageButton callButton;
+    ImageButton bellButton;
     public MediaPlayer mediaPlayer;
 
     @SuppressLint("WrongViewCast")
@@ -38,11 +41,22 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lockscreen);
 
+        deco = findViewById(R.id.deco);
+        deco2 = findViewById(R.id.deco2);
         callButton = findViewById(R.id.callButton);
         bellButton = findViewById(R.id.bellButton);
 
         callButton.setOnClickListener(this);
         bellButton.setOnClickListener(this);
+
+        Bitmap DecoBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.deco);
+        deco.setImageBitmap(DecoBitmap);
+        Bitmap Deco2Bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.deco2);
+        deco2.setImageBitmap(Deco2Bitmap);
+        Bitmap CallBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.lock_call);
+        callButton.setImageBitmap(CallBitmap);
+        Bitmap BellBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.lock_noise);
+        bellButton.setImageBitmap(BellBitmap);
 
 
         View view = getWindow().getDecorView();
@@ -56,8 +70,6 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
             // 21 버전 이상일 때
             getWindow().setStatusBarColor(Color.BLACK);
         }
-
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD); 작업창제거
     }
 
     @Override
