@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     LinearLayout mylogoutLayout;
     Button naverLogoutButton;
     ImageView profileImage;
+
+    Switch lockSwitch;
 
     /* 네이버 로그인 */
     private static String OAUTH_CLIENT_ID = "fJECNAV766XxJKZ4AQU8";
@@ -85,6 +88,15 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         naverLogoutButton = (Button)v.findViewById(R.id.naverLogoutButton);
         naverLogoutButton.setOnClickListener(this);
 
+        lockSwitch = (Switch)v.findViewById(R.id.lockSwitch);
+        switchCheck();
+        lockSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchCheck();
+            }
+        });
+
         mContext = MainActivity.mContext;
 
         /* 네이버 아이디로 로그인 */
@@ -110,6 +122,24 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         return v;
     }
 
+    @Override
+    public void onResume() {
+        switchCheck();
+        super.onResume();
+    }
+
+    private void switchCheck(){
+
+        if(lockSwitch.isChecked()) {
+            ((MainActivity)MainActivity.mContext).checkPermission();
+            Intent intent = new Intent(getActivity(), ScreenService.class);
+            getActivity().startService(intent);
+        }
+        else{
+            Intent intent = new Intent(getActivity(), ScreenService.class);
+            getActivity().stopService(intent);
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -117,10 +147,10 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 //            case R.id.mypage_login_layout:
 //                ((MainActivity)getActivity()).UserInfo();
 //                break;
-            case R.id.mypage_lockLayout:
-                Intent intent = new Intent(getActivity(),Mypage_Lockform.class);
-                startActivity(intent);
-                break;
+//            case R.id.mypage_lockLayout:
+//                Intent intent = new Intent(getActivity(),Mypage_Lockform.class);
+//                startActivity(intent);
+//                break;
             case R.id.mypage_patrolLayout:
                 Intent ptintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://patrol.police.go.kr/map/map.do"));
                 startActivity(ptintent);
@@ -176,11 +206,11 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                 final String image = response.getString("profile_image");
                 myNameText.setText(name);//메일 란 채우기
 
+                /* 네이버 프로필 이미지 보여주기 */
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {    // 오래 거릴 작업을 구현한다
                         try{
-                            // 걍 외우는게 좋다 -_-;
                             final ImageView iv = (ImageView)v.findViewById(R.id.userProfileImage);
                             URL url = new URL(image);
                             InputStream is = url.openStream();
@@ -203,6 +233,5 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                 e.printStackTrace();
             }
         }
-
     }
 }
