@@ -20,7 +20,7 @@
             android:paddingBottom="10dp">
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/postLogo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/logo" />
@@ -76,15 +76,16 @@
             android:background="#F8F8F8"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editText"
+            <TextView
+                android:id="@+id/boardDsText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"
                 android:gravity="top|left"
                 android:inputType="textMultiLine"
+                android:padding="10dp"
                 android:text="게시글내용이셈 게시글 씨 졸작극혐"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout

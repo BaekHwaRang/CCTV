@@ -111,14 +111,12 @@ public class Mypageform extends Fragment implements View.OnClickListener{
             new RequestApiTask().execute();
             myNameText.setText("");
             myEmailText.setText("");
-//            Toast.makeText(getActivity(), "로그인중", Toast.LENGTH_SHORT).show();
             mylogoutLayout.setVisibility(View.GONE);
             myloginLayout.setVisibility(View.VISIBLE);
 
         }
         else
         {
-//            Toast.makeText(getActivity(), "로그인중아님", Toast.LENGTH_SHORT).show();
             mylogoutLayout.setVisibility(View.VISIBLE);
             myloginLayout.setVisibility(View.GONE);
         }
@@ -225,7 +223,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                     /* 네이버 프로필 이미지 보여주기 */
                     Thread t = new Thread(new Runnable() {
                         @Override
-                        public void run() {    // 오래 거릴 작업을 구현한다
+                        public void run() {
                             try {
                                 final ImageView iv = (ImageView) v.findViewById(R.id.userProfileImage);
                                 URL url = new URL(image);

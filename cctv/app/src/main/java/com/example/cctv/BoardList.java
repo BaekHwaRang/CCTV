@@ -8,17 +8,19 @@ public class BoardList {
     public int getRank() {
         return rank;
     }
-    public void setRank(int rank){this.rank =rank;}
 
     public String getTitle() {
         return title;
     }
-    public void setTitle(String title){this.title =title;}
 
     public String getDescription() {
         return description;
     }
-    public void setDescription(String description) {
+
+    public BoardList(int rank, String title, String description) {
+        this.rank = rank;
+        this.title = title;
         this.description = description;
     }
+
 }
