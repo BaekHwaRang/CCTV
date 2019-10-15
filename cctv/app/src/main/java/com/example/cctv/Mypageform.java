@@ -43,12 +43,12 @@ import java.net.URL;
 public class Mypageform extends Fragment implements View.OnClickListener{
     View v;
 
-    LinearLayout LoginLayout;
     LinearLayout LockLayout;
     LinearLayout PatrolLayout;
 
     LinearLayout myloginLayout;
     TextView myNameText;
+    TextView myEmailText;
     LinearLayout mylogoutLayout;
     Button naverLogoutButton;
     ImageView profileImage;
@@ -72,6 +72,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.mypageform, container, false);
 
+
         LockLayout = (LinearLayout)v.findViewById(R.id.mypage_lockLayout);
         LockLayout.setOnClickListener(this);
         PatrolLayout = (LinearLayout)v.findViewById(R.id.mypage_patrolLayout);
@@ -82,6 +83,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         myloginLayout = (LinearLayout)v.findViewById(R.id.mypage_login_layout);
         myloginLayout.setOnClickListener(this);
         myNameText = (TextView) v.findViewById(R.id.mypage_username);
+        myEmailText = (TextView)v.findViewById(R.id.mypage_email);
         mylogoutLayout = (LinearLayout)v.findViewById(R.id.mypage_logout_layout);
         profileImage = (ImageView)v.findViewById(R.id.userProfileImage);
 
@@ -108,14 +110,15 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         {
             new RequestApiTask().execute();
             myNameText.setText("");
-            Toast.makeText(getActivity(), "로그인중", Toast.LENGTH_SHORT).show();
+            myEmailText.setText("");
+//            Toast.makeText(getActivity(), "로그인중", Toast.LENGTH_SHORT).show();
             mylogoutLayout.setVisibility(View.GONE);
             myloginLayout.setVisibility(View.VISIBLE);
 
         }
         else
         {
-            Toast.makeText(getActivity(), "로그인중아님", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "로그인중아님", Toast.LENGTH_SHORT).show();
             mylogoutLayout.setVisibility(View.VISIBLE);
             myloginLayout.setVisibility(View.GONE);
         }
@@ -125,6 +128,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         switchCheck();
+
         super.onResume();
     }
 
@@ -141,25 +145,25 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         }
     }
 
+    public void forceLogout() {
+        // 스레드로 돌려야 한다. 안 그러면 로그아웃 처리가 안되고 false를 반환한다.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mOAuthLoginInstance.logoutAndDeleteToken(mContext);
+            }
+        }).start();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-//            case R.id.mypage_login_layout:
-//                ((MainActivity)getActivity()).UserInfo();
-//                break;
-//            case R.id.mypage_lockLayout:
-//                Intent intent = new Intent(getActivity(),Mypage_Lockform.class);
-//                startActivity(intent);
-//                break;
             case R.id.mypage_patrolLayout:
                 Intent ptintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://patrol.police.go.kr/map/map.do"));
                 startActivity(ptintent);
                 break;
-//            case R.id.userInfoLayout:
-//            case R.id.userInfoButton:
-//                ((MainActivity)getActivity()).UserInfo();
-//                break;
             case R.id.naverLogoutButton:
+                forceLogout();
                 mOAuthLoginInstance.logout(mContext);
                 /*새로고침*/
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -172,11 +176,10 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         @Override
         public void run(boolean success) {
             if (success) {
-                        String accessToken = mOAuthLoginInstance.getAccessToken(mContext);
-                        String refreshToken = mOAuthLoginInstance.getRefreshToken(mContext);
-                        long expiresAt = mOAuthLoginInstance.getExpiresAt(mContext);
-                        String tokenType = mOAuthLoginInstance.getTokenType(mContext);
-
+                String accessToken = mOAuthLoginInstance.getAccessToken(mContext);
+                String refreshToken = mOAuthLoginInstance.getRefreshToken(mContext);
+                long expiresAt = mOAuthLoginInstance.getExpiresAt(mContext);
+                String tokenType = mOAuthLoginInstance.getTokenType(mContext);
             } else {
                 String errorCode = mOAuthLoginInstance.getLastErrorCode(mContext).getCode();
                 String errorDesc = mOAuthLoginInstance.getLastErrorDesc(mContext);
@@ -188,7 +191,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     private class RequestApiTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {//작업이 실행되기 전에 먼저 실행.
-            myNameText.setText((String) "");//메일 란 비우기
+            myNameText.setText((String) "");//이름 란 비우기
+            myEmailText.setText((String) "");
         }
 
         @Override
@@ -202,32 +206,45 @@ public class Mypageform extends Fragment implements View.OnClickListener{
             try {
                 JSONObject jsonObject = new JSONObject(content);
                 JSONObject response = jsonObject.getJSONObject("response");
-                String name = response.getString("name");
-                final String image = response.getString("profile_image");
-                myNameText.setText(name);//메일 란 채우기
 
-                /* 네이버 프로필 이미지 보여주기 */
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {    // 오래 거릴 작업을 구현한다
-                        try{
-                            final ImageView iv = (ImageView)v.findViewById(R.id.userProfileImage);
-                            URL url = new URL(image);
-                            InputStream is = url.openStream();
-                            final Bitmap bm = BitmapFactory.decodeStream(is);
-                            handler.post(new Runnable() {
+                if(!response.has("profile_image"))
+                {
+                    Toast.makeText(getActivity(), "프로필 사진 동의 안함 : 프로필 사진 기능 사용 불가", Toast.LENGTH_SHORT).show();
+                    String name = response.getString("name");
+                    String email = response.getString("email");
+                    myNameText.setText(name);
+                    myEmailText.setText(email);
+                }
+                else {
+                    String name = response.getString("name");
+                    final String image = response.getString("profile_image");
+                    String email = response.getString("email");
+                    myNameText.setText(name);
+                    myEmailText.setText(email);
 
-                                @Override
-                                public void run() {  // 화면에 그려줄 작업
-                                    iv.setImageBitmap(bm);
-                                }
-                            });
-                            iv.setImageBitmap(bm); //비트맵 객체로 보여주기
-                        } catch(Exception e){
+                    /* 네이버 프로필 이미지 보여주기 */
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {    // 오래 거릴 작업을 구현한다
+                            try {
+                                final ImageView iv = (ImageView) v.findViewById(R.id.userProfileImage);
+                                URL url = new URL(image);
+                                InputStream is = url.openStream();
+                                final Bitmap bm = BitmapFactory.decodeStream(is);
+                                handler.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {  // 화면에 그려줄 작업
+                                        iv.setImageBitmap(bm);
+                                    }
+                                });
+                                iv.setImageBitmap(bm); //비트맵 객체로 보여주기
+                            } catch (Exception e) {
+                            }
                         }
-                    }
-                });
-                t.start();
+                    });
+                    t.start();
+                }
             }
             catch (Exception e){
                 e.printStackTrace();
