@@ -76,13 +76,10 @@ public class Board_Writeform extends AppCompatActivity {
                                 maxid=(dataSnapshot.getChildrenCount());
                             }
                             long id = maxid+1;
-                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString() , Tv_text.getText().toString());
+                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString() , Tv_text.getText().toString(),0);
                             postValues = post.toMap();
-                            Log.e("id ", "_"+id);
-                            Log.e("title ", "_"+Tv_title.getText().toString());
-                            Log.e("text ", "_"+Tv_text.getText().toString());
 
-                            childUpdate.put("/id_list/"+id,postValues);
+                            childUpdate.put("/id_list/"+id+"/post",postValues);
 
                             // childUpdate.put("/post_index/"+Tv_title.getText().toString(),postValues);
 
