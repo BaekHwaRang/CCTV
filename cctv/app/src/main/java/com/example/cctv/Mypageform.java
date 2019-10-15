@@ -55,8 +55,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     public static OAuthLogin mOAuthLoginInstance;
     private Mypageform activity;
 
-    String accessToken="";
-
     public static Context mContext;
 
     @Nullable
@@ -89,9 +87,12 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
         if (mOAuthLoginInstance.getAccessToken(getActivity()) != null)
         {
+            new RequestApiTask().execute();
+            myNameText.setText("");
             Toast.makeText(getActivity(), "로그인중", Toast.LENGTH_SHORT).show();
             myloginLayout.setVisibility(View.GONE);
             mylogoutLayout.setVisibility(View.VISIBLE);
+
         }
         else
         {
@@ -134,11 +135,10 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         @Override
         public void run(boolean success) {
             if (success) {
-                        accessToken = mOAuthLoginInstance.getAccessToken(mContext);
+                        String accessToken = mOAuthLoginInstance.getAccessToken(mContext);
                         String refreshToken = mOAuthLoginInstance.getRefreshToken(mContext);
                         long expiresAt = mOAuthLoginInstance.getExpiresAt(mContext);
                         String tokenType = mOAuthLoginInstance.getTokenType(mContext);
-
 
             } else {
                 String errorCode = mOAuthLoginInstance.getLastErrorCode(mContext).getCode();
@@ -148,67 +148,29 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         }
     };
 
-    public class NaverProfileGet extends AsyncTask<String, Void, String> {
-        //네이버 프로필 조회 API에 보낼 헤더. 그대로 쓰면 된다.
-        String header = "Bearer " + accessToken;
-
+    private class RequestApiTask extends AsyncTask<Void, Void, String> {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        protected void onPreExecute() {//작업이 실행되기 전에 먼저 실행.
+            myNameText.setText((String) "");//메일 란 비우기
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(Void... params) {//네트워크에 연결하는 과정이 있으므로 다른 스레드에서 실행되어야 한다.
+            String url = "https://openapi.naver.com/v1/nid/me";
+            String at = mOAuthLoginInstance.getAccessToken(mContext);
+            return mOAuthLoginInstance.requestApi(mContext, at, url);//url, 토큰을 넘겨서 값을 받아온다.json 타입으로 받아진다.
+        }
 
-            //네이버 프로필 조회 API에서 프로필을 jSON 형식으로 받아오는 부분.
-            //이 부분도 그대로 사용하면 된다.
-            StringBuffer response = new StringBuffer();
+        protected void onPostExecute(String content) {//doInBackground 에서 리턴된 값이 여기로 들어온다.
             try {
-                String apiURL = "https://openapi.naver.com/v1/nid/me";
-                URL url = new URL(apiURL);
-                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("Authorization", header);
-                int responseCode = conn.getResponseCode();
-                BufferedReader br;
-                if(responseCode == 200) {
-                    br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                } else {
-                    br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                }
-                String inputLine;
-                while((inputLine = br.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                br.close();
-
-            } catch (Exception e) {
+                JSONObject jsonObject = new JSONObject(content);
+                JSONObject response = jsonObject.getJSONObject("response");
+                String name = response.getString("name");
+                myNameText.setText(name);//메일 란 채우기
+            }
+            catch (Exception e){
                 e.printStackTrace();
             }
-
-            return response.toString();
-        }
-
-        //네이버 프로필 조회 API에서 받은 jSON에서 원하는 데이터를 뽑아내는 부분
-        //여기서는 닉네임, 프로필사진 주소, 이메일을 얻어오지만, 다른 값도 얻어올 수 있다.
-        //이 부분을 원하는 대로 수정하면 된다.
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            try {
-                JSONObject jsonObject1 = new JSONObject(result);
-                JSONObject jsonObject2 = (JSONObject)jsonObject1.get("response");
-                String image = jsonObject2.getString("profile_image");
-                String name = jsonObject2.getString("name");
-                String email = jsonObject2.getString("email");
-
-                myNameText.setText(name);
-            } catch (Exception e) {}
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
         }
     }
 }
