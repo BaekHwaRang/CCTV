@@ -64,9 +64,11 @@ public class Board_Writeform extends AppCompatActivity {
 
                 if(Tv_title.getText()==null || Tv_title.getText().length()==0){
                     Toast.makeText(Board_Writeform.this, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if(Tv_text.getText()==null || Tv_text.getText().length()==0){
                     Toast.makeText(Board_Writeform.this, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 else {
                     mContent.addChildEventListener(new ChildEventListener() {

@@ -34,17 +34,33 @@
             android:background="@android:color/background_light"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/boardTitleText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center|left"
-                android:padding="20dp"
-                android:text="게시글 제목"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:paddingLeft="15dp">
+
+                <TextView
+                    android:id="@+id/boardTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:text="게시글 제목"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/boardWriterText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center|left"
+                    android:text="작성자"
+                    android:textSize="10sp" />
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/GoodButton"

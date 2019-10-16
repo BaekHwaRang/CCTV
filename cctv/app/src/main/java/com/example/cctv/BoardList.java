@@ -1,9 +1,11 @@
 package com.example.cctv;
 
 public class BoardList {
-    private int rank;             //게시글 순위
+    private int rank;             //게시글 추천 수
     private String title;         // 게시글 제목
     private String description;    // 게시글 내용
+    private String id;             // 게시글 방 번호
+    private String writer;       //작성자 아이디
 
     public int getRank() {
         return rank;
@@ -17,10 +19,16 @@ public class BoardList {
         return description;
     }
 
-    public BoardList(int rank, String title, String description) {
+    public String getId() {return id;}
+
+    public String getWriter() {return writer;}
+
+    public BoardList(int rank,String id, String title, String description, String writer) {
         this.rank = rank;
+        this.id = id;
         this.title = title;
         this.description = description;
+        this.writer = writer;
     }
 
 }
