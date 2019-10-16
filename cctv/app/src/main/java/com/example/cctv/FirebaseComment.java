@@ -36,7 +36,7 @@ public class FirebaseComment {
     }
 
     @Exclude
-    public Map<String , Object> toMap(){
+    public Map<String , Object> toMapC(){
         HashMap<String , Object> result = new HashMap<>();
         result.put("c_id",c_id);
         result.put("c_text",c_text);
