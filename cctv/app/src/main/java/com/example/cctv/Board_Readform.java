@@ -74,7 +74,7 @@ public class Board_Readform extends Activity {
                             FirebaseComment post = new FirebaseComment(id,commentText.getText().toString());
                             postValues = post.toMap();
 
-                            childUpdate.put("/id_list/"+id+"/post",postValues); //여기 고쳐주셈
+                            childUpdate.put("/comment_list/"+id+"/comment",postValues); //여기 고쳐주셈
 
                             mContent.updateChildren(childUpdate);
 

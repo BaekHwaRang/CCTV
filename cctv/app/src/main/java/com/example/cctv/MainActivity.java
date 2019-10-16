@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
         my_addressfragment = new Mypage_Addressform();
         mypagefragment = new Mypageform();
         userfragment = new Userform();
-        votefragment = new Vote_CCTVform();
 
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
