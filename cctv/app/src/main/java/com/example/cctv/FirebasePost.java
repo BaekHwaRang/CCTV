@@ -16,6 +16,8 @@ public class FirebasePost {
         this.p_id = p_id;
     }
 
+
+
     public String getP_text() {
         return p_text;
     }
@@ -32,6 +34,14 @@ public class FirebasePost {
         this.p_title = p_title;
     }
 
+    public String getC_text() {
+        return c_text;
+    }
+
+    public void setC_text(String c_text) {
+        this.c_text = c_text;
+    }
+
     public long getGood() {
         return p_good;
     }
@@ -40,25 +50,44 @@ public class FirebasePost {
         this.p_good = good;
     }
 
-    public String getP_writer() {return p_writer;}
-
-    public void setP_writer(String p_writer) {this.p_writer = p_writer;}
-
-
     private long p_id;
+    private int p_good;
     private String p_text;
     private String p_title;
-    private int p_good;
-    private String p_writer;
+
+    public String getC_id() {
+        return c_id;
+    }
+
+    public void setC_id(String c_id) {
+        this.c_id = c_id;
+    }
+
+    public long getC_index() {
+        return c_index;
+    }
+
+    public void setC_index(long c_index) {
+        this.c_index = c_index;
+    }
+
+    private String c_id;
+    private long c_index;
+    private String c_text;
+
     public FirebasePost(){
 
     }
-    public FirebasePost(long id ,String title, String text,int good,String writer){
-        this.p_id = id;
+    public FirebasePost(long c_index ,String c_id, String c_text){ // comment 생성자
+        this.c_id = c_id;
+        this.c_text = c_text;
+        this.c_index = c_index;
+    }
+    public FirebasePost(long p_id ,String title, String text,int good){  // post 생성자
+        this.p_id = p_id;
         this.p_text = text;
         this.p_title = title;
         this.p_good = good;
-        this.p_writer = writer;
     }
 
     @Exclude
@@ -68,8 +97,13 @@ public class FirebasePost {
         result.put("p_title",p_title);
         result.put("p_text",p_text);
         result.put("p_good",p_good);
-        result.put("p_writer",p_writer);
         return result;
     }
-
+    public Map<String ,Object> toMapComment(){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("c_id",c_id);
+        result.put("c_index",c_index);
+        result.put("c_text",c_text);
+        return result;
+    }
 }

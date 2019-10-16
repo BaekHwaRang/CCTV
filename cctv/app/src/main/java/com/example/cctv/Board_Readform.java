@@ -5,11 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -25,7 +24,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.Map;
 
 public class Board_Readform extends Activity {
@@ -49,43 +51,50 @@ public class Board_Readform extends Activity {
 
         TextView title = (TextView)findViewById(R.id.boardTitleText);
         TextView Ds = (TextView)findViewById(R.id.boardDsText);
-        TextView writer = (TextView)findViewById(R.id.boardWriterText);
 
         commentText = (TextView)findViewById(R.id.comment_write);   //댓글 입력창
         commentButton = (Button)findViewById(R.id.comment_submit);  //댓글 등록 버튼
 
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
-        writer.setText(intent.getStringExtra("writer"));
 
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-                final DatabaseReference mContent = mDatabase.getReference();
+                final DatabaseReference mContent = mDatabase.getReference("id_list");
 
                 if(commentText.getText()==null || commentText.getText().length()==0){
                     Toast.makeText(Board_Readform.this, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    final List<String> s_list = new ArrayList<>();
                     mContent.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            if(dataSnapshot.exists()){
-                                maxid=(dataSnapshot.getChildrenCount());
+                            int index = 1;
+                            int tear = 0;
+                            for (DataSnapshot filesnapshot : dataSnapshot.getChildren()) {
+                                Log.e("snapshot",""+filesnapshot.getChildrenCount());
+
+                                s_list.add(String.valueOf(filesnapshot.getChildrenCount()));
                             }
-                            long id = maxid+1;
-                            FirebaseComment post = new FirebaseComment(id,commentText.getText().toString());
-                            postValues = post.toMapC();
+                            s_list.clear();
+
+                        /*    long id = maxid+1;
+                            String name = "장주리";
+                            FirebasePost post = new FirebasePost(id,name,commentText.getText().toString());
+                            postValues = post.toMapComment();
 
                             childUpdate.put("/id_list/"+id+"/comment",postValues);
 
                             mContent.updateChildren(childUpdate);
 
-                            commentText.setText("");
+                            commentText.setText("");*/
 
                             //새로고침하는 코드 적어야됨
                         }
+
 
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -107,6 +116,7 @@ public class Board_Readform extends Activity {
 
                         }
                     });
+                    commentText.setText("");
                 }
             }
         });
@@ -120,17 +130,5 @@ public class Board_Readform extends Activity {
         Logo.setImageBitmap(LogoBitmap);
         Bitmap GoodBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.board_best);
         GoodButton.setImageBitmap(GoodBitmap);
-
-        View view = getWindow().getDecorView();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (view != null) {
-                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
-                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
-            }
-        }else if (Build.VERSION.SDK_INT >= 21) {
-            // 21 버전 이상일 때
-            getWindow().setStatusBarColor(Color.BLACK);
-        }
     }
 }
