@@ -41,7 +41,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         listView = (ListView) findViewById(R.id.post_lv);
         boardWriteButton = (ImageButton)findViewById(R.id.board_writeButton);
         boardWriteButton.setOnClickListener(this);
-        ;
+
         data = new ArrayList<>();
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference("id_list");
@@ -58,7 +58,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     String ptitle = filedata.child("post").child("p_title").getValue().toString();
                     String ptext = filedata.child("post").child("p_text").getValue().toString();
                     int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
-                    String writer="익명이";
+                    String writer= filedata.child("post").child("p_writer").getValue().toString();  //자꾸 널값 뜸
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
                     Log.e("pid",pid);
@@ -85,7 +85,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     String ptitle = filedata.child("post").child("p_title").getValue().toString();
                     String ptext = filedata.child("post").child("p_text").getValue().toString();
                     int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
-                    String writer="익명이";
+                    String writer= filedata.child("post").child("p_writer").getValue().toString();
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
                 }
@@ -136,7 +136,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                 Intent intent = new Intent(getApplicationContext(),Board_Readform.class);
                 intent.putExtra("title",data.get(position).getTitle());
                 intent.putExtra("Ds",data.get(position).getDescription());
-                intent.putExtra("writer","익명이");
+                intent.putExtra("writer",data.get(position).getWriter());
                 startActivity(intent);
             }
         });

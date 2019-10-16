@@ -16,8 +16,6 @@ public class FirebasePost {
         this.p_id = p_id;
     }
 
-    private long p_id;
-
     public String getP_text() {
         return p_text;
     }
@@ -34,14 +32,6 @@ public class FirebasePost {
         this.p_title = p_title;
     }
 
-    public String getC_text() {
-        return c_text;
-    }
-
-    public void setC_text(String c_text) {
-        this.c_text = c_text;
-    }
-
     public long getGood() {
         return p_good;
     }
@@ -50,20 +40,25 @@ public class FirebasePost {
         this.p_good = good;
     }
 
-    private long c_id;
+    public String getP_writer() {return p_writer;}
 
+    public void setP_writer(String p_writer) {this.p_writer = p_writer;}
+
+
+    private long p_id;
     private String p_text;
     private String p_title;
-    private String c_text;
     private int p_good;
+    private String p_writer;
     public FirebasePost(){
 
     }
-    public FirebasePost(long id ,String title, String text,int good){
+    public FirebasePost(long id ,String title, String text,int good,String writer){
         this.p_id = id;
         this.p_text = text;
         this.p_title = title;
         this.p_good = good;
+        this.p_writer = writer;
     }
 
     @Exclude
@@ -73,6 +68,7 @@ public class FirebasePost {
         result.put("p_title",p_title);
         result.put("p_text",p_text);
         result.put("p_good",p_good);
+        result.put("p_writer",p_writer);
         return result;
     }
 

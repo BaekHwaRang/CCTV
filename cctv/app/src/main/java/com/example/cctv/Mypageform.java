@@ -43,6 +43,7 @@ import java.net.URL;
 public class Mypageform extends Fragment implements View.OnClickListener{
     View v;
 
+    MainActivity mainActivity;
     LinearLayout LockLayout;
     LinearLayout PatrolLayout;
 
@@ -72,6 +73,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.mypageform, container, false);
 
+        mainActivity = new MainActivity();
 
         LockLayout = (LinearLayout)v.findViewById(R.id.mypage_lockLayout);
         LockLayout.setOnClickListener(this);

@@ -251,5 +251,4 @@ public class MainActivity extends AppCompatActivity
             display = "map";
         }
     }
-
 }

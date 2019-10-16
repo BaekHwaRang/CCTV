@@ -24,11 +24,11 @@ public class BoardList {
     public String getWriter() {return writer;}
 
     public BoardList(int rank,String id, String title, String description, String writer) {
-        this.rank = rank;
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.writer = writer;
+        this.rank = rank;               //추천 수
+        this.id = id;                    //게시글 인덱스
+        this.title = title;              //게시글 제목
+        this.description = description;  //게시글 내용
+        this.writer = writer;            //게시글 작성자
     }
 
 }
