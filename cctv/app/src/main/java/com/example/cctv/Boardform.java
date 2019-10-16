@@ -56,6 +56,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
                     BoardList data1 = new BoardList(count,ptitle,ptext);
                     data.add(data1);
+                    Log.e("pid",pid);
                 }
             }
             @Override
