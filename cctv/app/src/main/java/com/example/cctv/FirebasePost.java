@@ -18,14 +18,6 @@ public class FirebasePost {
 
     private long p_id;
 
-    public long getC_id() {
-        return c_id;
-    }
-
-    public void setC_id(long c_id) {
-        this.c_id = c_id;
-    }
-
     public String getP_text() {
         return p_text;
     }
@@ -73,6 +65,7 @@ public class FirebasePost {
         this.p_title = title;
         this.p_good = good;
     }
+
     @Exclude
     public Map<String , Object> toMap(){
         HashMap<String , Object> result = new HashMap<>();

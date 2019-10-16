@@ -185,7 +185,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
             }
         }
     };
-
     private class RequestApiTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {//작업이 실행되기 전에 먼저 실행.
@@ -207,7 +206,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
                 if(!response.has("profile_image"))
                 {
-                    Toast.makeText(getActivity(), "프로필 사진 동의 안함 : 프로필 사진 기능 사용 불가", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "프로필 사진 동의 안함 : 네이버 프로필 사진 기능 사용 불가", Toast.LENGTH_SHORT).show();
                     String name = response.getString("name");
                     String email = response.getString("email");
                     myNameText.setText(name);

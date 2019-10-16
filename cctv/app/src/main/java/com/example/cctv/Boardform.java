@@ -44,10 +44,12 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference("id_list");
         mContent.keepSynced(true);
+
         mContent.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot filedata : dataSnapshot.getChildren()) {
+                    Log.e("test","");
                     String pid = filedata.child("post").child("p_id").getValue().toString();
                     String ptitle = filedata.child("post").child("p_title").getValue().toString();
                     String ptext = filedata.child("post").child("p_text").getValue().toString();
@@ -80,34 +82,6 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                 Log.w("", "Listener was cancelled");
             }
         });
-
-        mContent.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("실패","2");
-            }
-        });
-
         /* 리스트 아이템 연결 */
         BoardAdapter adapter = new BoardAdapter(this,R.layout.board_listview_layout,data);
         listView.setAdapter(adapter);
@@ -122,6 +96,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                 startActivity(intent);
             }
         });
+
 
 
 

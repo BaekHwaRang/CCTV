@@ -97,7 +97,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/comment_write"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -106,7 +106,7 @@
                 android:inputType="text" />
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/comment_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
