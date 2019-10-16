@@ -56,8 +56,40 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
                     BoardList data1 = new BoardList(count,ptitle,ptext);
                     data.add(data1);
-
                 }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        mContent.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                for(DataSnapshot filedata : dataSnapshot.getChildren()) {
+                    Log.e("test","");
+                    String pid = filedata.child("post").child("p_id").getValue().toString();
+                    String ptitle = filedata.child("post").child("p_title").getValue().toString();
+                    String ptext = filedata.child("post").child("p_text").getValue().toString();
+                    int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
+                    BoardList data1 = new BoardList(count,ptitle,ptext);
+                    data.add(data1);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override
@@ -97,9 +129,6 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                 startActivity(intent);
             }
         });
-
-
-
 
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
