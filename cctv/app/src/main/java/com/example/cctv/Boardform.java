@@ -31,6 +31,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     ArrayList<BoardList> data = null;
     Map<String , Object> childUpdate = new HashMap<String,Object>();
     Map<String, Object> good_value = null;
+    BoardAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         listView = (ListView) findViewById(R.id.post_lv);
         boardWriteButton = (ImageButton)findViewById(R.id.board_writeButton);
         boardWriteButton.setOnClickListener(this);
+        ;
         data = new ArrayList<>();
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference("id_list");
@@ -57,6 +59,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     BoardList data1 = new BoardList(count,ptitle,ptext);
                     data.add(data1);
                     Log.e("pid",pid);
+                    adapter  = new BoardAdapter(getApplicationContext(),R.layout.board_listview_layout,data);
+                    listView.setAdapter(adapter);
                 }
             }
             @Override
@@ -117,7 +121,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
             }
         });
         /* 리스트 아이템 연결 */
-        BoardAdapter adapter = new BoardAdapter(this,R.layout.board_listview_layout,data);
+
+        adapter  = new BoardAdapter(this,R.layout.board_listview_layout,data);
         listView.setAdapter(adapter);
 
         /* 리스트뷰 아이템 클릭 */

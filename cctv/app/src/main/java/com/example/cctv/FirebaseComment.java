@@ -25,6 +25,7 @@ public class FirebaseComment {
     }
 
     private long c_id;
+
     private String c_text;
 
     public FirebaseComment(){
