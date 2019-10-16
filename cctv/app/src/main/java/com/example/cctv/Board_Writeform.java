@@ -78,7 +78,7 @@ public class Board_Writeform extends AppCompatActivity {
                                 maxid=(dataSnapshot.getChildrenCount());
                             }
                             long id = maxid+1;
-                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString() , Tv_text.getText().toString(),0,"익명이");
+                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString(),Tv_text.getText().toString(),0,"익명이");
                             postValues = post.toMap();
 
                             childUpdate.put("/id_list/"+id+"/post",postValues);

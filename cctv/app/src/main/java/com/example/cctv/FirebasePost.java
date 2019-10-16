@@ -54,6 +54,7 @@ public class FirebasePost {
     private int p_good;
     private String p_text;
     private String p_title;
+    private String p_writer;
 
     public String getC_id() {
         return c_id;
@@ -83,11 +84,12 @@ public class FirebasePost {
         this.c_text = c_text;
         this.c_index = c_index;
     }
-    public FirebasePost(long p_id ,String title, String text,int good){  // post 생성자
+    public FirebasePost(long p_id ,String title, String text,int good, String writer){  // post 생성자
         this.p_id = p_id;
         this.p_text = text;
         this.p_title = title;
         this.p_good = good;
+        this.p_writer = writer;
     }
 
     @Exclude
@@ -97,6 +99,7 @@ public class FirebasePost {
         result.put("p_title",p_title);
         result.put("p_text",p_text);
         result.put("p_good",p_good);
+        result.put("p_writer",p_writer);
         return result;
     }
     public Map<String ,Object> toMapComment(){

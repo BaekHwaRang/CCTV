@@ -58,7 +58,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     String ptitle = filedata.child("post").child("p_title").getValue().toString();
                     String ptext = filedata.child("post").child("p_text").getValue().toString();
                     int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
-                    String writer= filedata.child("post").child("p_writer").getValue().toString();  //자꾸 널값 뜸
+                    String writer= "익명이";  //자꾸 널값 뜸
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
                     Log.e("pid",pid);
@@ -85,7 +85,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     String ptitle = filedata.child("post").child("p_title").getValue().toString();
                     String ptext = filedata.child("post").child("p_text").getValue().toString();
                     int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
-                    String writer= filedata.child("post").child("p_writer").getValue().toString();
+                    String writer= "익명이";
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
                 }

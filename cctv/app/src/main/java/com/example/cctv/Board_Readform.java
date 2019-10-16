@@ -51,12 +51,14 @@ public class Board_Readform extends Activity {
 
         TextView title = (TextView)findViewById(R.id.boardTitleText);
         TextView Ds = (TextView)findViewById(R.id.boardDsText);
+        TextView writer = (TextView)findViewById(R.id.boardWriterText);
 
         commentText = (TextView)findViewById(R.id.comment_write);   //댓글 입력창
         commentButton = (Button)findViewById(R.id.comment_submit);  //댓글 등록 버튼
 
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
+        writer.setText(intent.getStringExtra("writer"));
 
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
