@@ -67,10 +67,14 @@ public class Board_Readform extends Activity {
         writer.setText(intent.getStringExtra("writer"));
 
         data = new ArrayList<>();
-        CommentList commentList1 = new CommentList("wkdwnfl119@naver.com","네이버 연결좀 해주셈..");
-        CommentList commentList2 = new CommentList("kjund123@naver.com","쪼릇쪼릇?");
+        CommentList commentList1 = new CommentList("장주리","네이버 연결좀 해주셈..");
+        CommentList commentList2 = new CommentList("백화랑","쪼릇쪼릇?");
+        CommentList commentList3 = new CommentList("배콰랑","에베엥ㄴ네ㅔ네네배ㅏ베ㅔ베네ㅔ에ㅔ네ㅔ엔에ㅔㅔ에베ㅔ베베에ㅔ에에베ㅔ에베ㅔ에베ㅔ엥베베베베베ㅔ엥에ㅔㅇ엡에베ㅔㅇ베ㅔ");
+        CommentList commentList4 = new CommentList("강아지","멍멍멍ㅁ엄멍멍멍ㅁ엄엄어엉ㅇ멍머엄어멈어멍멈어ㅓㅓㅇㅁㅇㅇㅁ엄어엉ㅇ멍멍멍ㅁ엄엄어엉ㅇ멍머엄어멈어멍멈어ㅓㅓㅇㅁㅇㅇㅁ멍머엄어멈어멍멈어ㅓㅓㅇㅁㅇㅇㅁ");
         data.add(commentList1);
         data.add(commentList2);
+        data.add(commentList3);
+        data.add(commentList4);
         adapter = new CommentAdapter(getApplicationContext(),R.layout.comment_listview_layout,data);
         listView.setAdapter(adapter);
 

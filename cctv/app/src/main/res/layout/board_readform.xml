@@ -100,8 +100,8 @@
                 android:gravity="top|left"
                 android:inputType="textMultiLine"
                 android:padding="10dp"
-                android:text="게시글내용이셈 게시글 씨 졸작극혐"
-                android:textSize="12sp" />
+                android:text="게시글내용"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -120,7 +120,7 @@
                 android:background="@android:color/transparent"
                 android:ems="15"
                 android:hint="댓글을 입력해주세요"
-                android:inputType="text"
+                android:inputType="textMultiLine"
                 android:padding="10dp" />
 
             <Button

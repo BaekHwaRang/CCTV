@@ -206,10 +206,10 @@ public class Newsform extends AppCompatActivity implements View.OnClickListener{
 //                            News_list.get(i).setAuthor(parser.getText());
 //                            onAuthor = true;
 //                        }
-//                        if (tagName.equals("link") && !onLink) {
-//                            News_list.get(i).setLink(parser.getText());
-//                            onLink = true;
-//                        }
+                        if (tagName.equals("link") && !onLink) {
+                            News_list.get(i).setLink(parser.getText());
+                            onLink = true;
+                        }
 //                        if (tagName.equals("category") && !onCategory) {
 //                            News_list.get(i).setCategory(parser.getText());
 //                            onCategory = true;
