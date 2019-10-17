@@ -197,6 +197,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        Mypageform mypageform = new Mypageform();
+        mypageform.forceLogout();
+        super.onDestroy();
+    }
 
     /* 프래그먼트 호출용 */
 

@@ -59,6 +59,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
     Switch lockSwitch;
 
+    Boolean loginCheck;
+
     /* 네이버 로그인 */
     private static String OAUTH_CLIENT_ID = "fJECNAV766XxJKZ4AQU8";
     private static String OAUTH_CLIENT_SECRET = "aKa_jmn84Q";
@@ -113,15 +115,16 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
         if (mOAuthLoginInstance.getAccessToken(getActivity()) != null)
         {
-            new RequestApiTask().execute();
+            loginCheck = true;
             myNameText.setText("");
             myEmailText.setText("");
             mylogoutLayout.setVisibility(View.GONE);
             myloginLayout.setVisibility(View.VISIBLE);
-
+            new RequestApiTask().execute();
         }
         else
         {
+            loginCheck = false;
             mylogoutLayout.setVisibility(View.VISIBLE);
             myloginLayout.setVisibility(View.GONE);
         }
@@ -131,8 +134,22 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
     @Override
     public void onResume() {
-        switchCheck();
+        mOAuthLoginInstance = OAuthLogin.getInstance();
+        mOAuthLoginInstance.showDevelopersLog(true);
+        mOAuthLoginInstance.init(mContext,OAUTH_CLIENT_ID,OAUTH_CLIENT_SECRET,OAUTH_CLIENT_NAME);
 
+        if ((mOAuthLoginInstance.getAccessToken(getActivity()) != null)) {
+            myloginLayout = (LinearLayout) v.findViewById(R.id.mypage_login_layout);
+            mylogoutLayout = (LinearLayout) v.findViewById(R.id.mypage_logout_layout);
+            mylogoutLayout.setVisibility(View.GONE);
+            myloginLayout.setVisibility(View.VISIBLE);
+            new RequestApiTask().execute();
+        }
+        else {
+            mylogoutLayout.setVisibility(View.VISIBLE);
+            myloginLayout.setVisibility(View.GONE);
+        }
+        switchCheck();
         super.onResume();
     }
 
@@ -209,7 +226,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
             try {
                 JSONObject jsonObject = new JSONObject(content);
                 JSONObject response = jsonObject.getJSONObject("response");
-
                 if(!response.has("profile_image"))
                 {
                     Toast.makeText(getActivity(), "프로필 사진 동의 안함 : 네이버 프로필 사진 기능 사용 불가", Toast.LENGTH_SHORT).show();
@@ -219,6 +235,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                     myEmailText.setText(email);
 
                     writerText = email;
+
                 }
                 else {
                     String name = response.getString("name");
