@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -39,13 +40,15 @@ public class Board_Readform extends Activity {
     TextView commentText;
     Button commentButton;
 
+
+    Map<String, Object> childUpdate = new HashMap<>();
+    Map<String, Object> postValues = null;
+    long number = 1;
+    String p_id;
+
     ListView listView;
     ArrayList<CommentList> data = null;
     CommentAdapter adapter;
-
-    Map<String , Object> childUpdate = new HashMap<>();
-    Map<String , Object> postValues = null;
-    long maxid=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,66 +57,109 @@ public class Board_Readform extends Activity {
 
         Intent intent = getIntent();
 
-        TextView title = (TextView)findViewById(R.id.boardTitleText);
-        TextView Ds = (TextView)findViewById(R.id.boardDsText);
-        TextView writer = (TextView)findViewById(R.id.boardWriterText);
+        TextView title = (TextView) findViewById(R.id.boardTitleText);
+        TextView Ds = (TextView) findViewById(R.id.boardDsText);
+        TextView writer = (TextView) findViewById(R.id.boardWriterText);
         listView = (ListView)findViewById(R.id.CommentList);
 
-        commentText = (TextView)findViewById(R.id.comment_write);   //댓글 입력창
-        commentButton = (Button)findViewById(R.id.comment_submit);  //댓글 등록 버튼
+        commentText = (TextView) findViewById(R.id.comment_write);   //댓글 입력창
+        commentButton = (Button) findViewById(R.id.comment_submit);  //댓글 등록 버튼
 
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
         writer.setText(intent.getStringExtra("writer"));
+        p_id = intent.getStringExtra("index");
+        Log.e("read_pid", String.valueOf(p_id));
+
+        final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        final DatabaseReference mContent = mDatabase.getReference();
 
         data = new ArrayList<>();
-        CommentList commentList1 = new CommentList("장주리","네이버 연결좀 해주셈..");
-        CommentList commentList2 = new CommentList("백화랑","쪼릇쪼릇?");
-        CommentList commentList3 = new CommentList("배콰랑","에베엥ㄴ네ㅔ네네배ㅏ베ㅔ베네ㅔ에ㅔ네ㅔ엔에ㅔㅔ에베ㅔ베베에ㅔ에에베ㅔ에베ㅔ에베ㅔ엥베베베베베ㅔ엥에ㅔㅇ엡에베ㅔㅇ베ㅔ");
-        CommentList commentList4 = new CommentList("강아지","멍멍멍ㅁ엄멍멍멍ㅁ엄엄어엉ㅇ멍머엄어멈어멍멈어ㅓㅓㅇㅁㅇㅇㅁ엄어엉ㅇ멍멍멍ㅁ엄엄어엉ㅇ멍머엄어멈어멍멈어ㅓㅓㅇㅁㅇㅇㅁ멍머엄어멈어멍멈어ㅓㅓㅇㅁㅇㅇㅁ");
-        data.add(commentList1);
-        data.add(commentList2);
-        data.add(commentList3);
-        data.add(commentList4);
-        adapter = new CommentAdapter(getApplicationContext(),R.layout.comment_listview_layout,data);
-        listView.setAdapter(adapter);
 
+        mContent.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                number = 1;
+                if(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+5).getValue()==null){
+                    Log.e("if 확인","");
+                }
+
+                for(long i=1; i <= dataSnapshot.child("id_list").child("" + p_id).child("comment").getChildrenCount();i++){
+                    while(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).getValue()==null){
+                        number++;
+                    }
+                    Log.e("c_index"+number+" c_id",""+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_id").getValue());
+                    Log.e("c_index"+number+" c_text",""+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_text").getValue());
+                    String c_id = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_id").getValue());
+                    String c_text = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_text").getValue());
+                    String c_index = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).getValue());
+
+                    CommentList commentList1 = new CommentList(c_id,c_text);
+                    adapter = new CommentAdapter(getApplicationContext(),R.layout.comment_listview_layout,data);
+                    data.add(commentList1);
+                    listView.setAdapter(adapter);
+
+                    number++;
+                }
+
+
+               /* BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
+                    data.add(data1);
+                    Log.e("pid",""+pid);
+                    adapter  = new BoardAdapter(getApplicationContext(),R.layout.board_listview_layout,data);
+                    listView.setAdapter(adapter);*/
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-                final DatabaseReference mContent = mDatabase.getReference("id_list");
-
-                if(commentText.getText()==null || commentText.getText().length()==0){
+                number=1;
+                if (commentText.getText() == null || commentText.getText().length() == 0) {
                     Toast.makeText(Board_Readform.this, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    final List<String> s_list = new ArrayList<>();
+                } else {
                     mContent.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            int index = 1;
-                            int tear = 0;
-                            for (DataSnapshot filesnapshot : dataSnapshot.getChildren()) {
-                                Log.e("snapshot",""+filesnapshot.getChildrenCount());
+//
+                            if (dataSnapshot.child("" + p_id).getChildrenCount() == 1) {
+                                String c_id = "고래";
+                                String c_text = commentText.getText().toString();
 
-                                s_list.add(String.valueOf(filesnapshot.getChildrenCount()));
+                                FirebasePost post = new FirebasePost(number, c_id, c_text);
+                                postValues = post.toMapComment();
+
+                                childUpdate.put("/id_list/" + p_id + "/comment/c_index" + number, postValues);
+
+                                mContent.updateChildren(childUpdate);
+
+
+                                commentText.setText("");
+                            } else {
+                                number = dataSnapshot.child("" + p_id).child("comment").getChildrenCount() + 1;
+
+                                Log.e("c_id", "" + dataSnapshot.child("" + p_id).child("comment").child("c_index" + number).child("c_id").getValue());
+                                Log.e("c_text", "" + dataSnapshot.child("" + p_id).child("comment").child("c_index" + number).child("c_text").getValue());
+                                Log.e("getText", commentText.getText().toString());
+
+                                String c_id = "고래";
+                                String c_text = commentText.getText().toString();
+
+                                FirebasePost post = new FirebasePost(number, c_id, c_text);
+                                postValues = post.toMapComment();
+
+                                childUpdate.put("/id_list/" + p_id + "/comment/c_index" + (number), postValues);
+
+                                mContent.updateChildren(childUpdate);
+
+
+                                commentText.setText("");
                             }
-                            s_list.clear();
-
-                        /*    long id = maxid+1;
-                            String name = "장주리";
-                            FirebasePost post = new FirebasePost(id,name,commentText.getText().toString());
-                            postValues = post.toMapComment();
-
-                            childUpdate.put("/id_list/"+id+"/comment",postValues);
-
-                            mContent.updateChildren(childUpdate);
-
-                            commentText.setText("");*/
-
-                            //새로고침하는 코드 적어야됨
                         }
 
 
@@ -137,19 +183,20 @@ public class Board_Readform extends Activity {
 
                         }
                     });
-                    commentText.setText("");
+
                 }
             }
         });
 
 
         /* 이미지 비트맵 변환*/
-        Logo = (ImageView)findViewById(R.id.postLogo);
-        GoodButton = (ImageButton)findViewById(R.id.GoodButton);
+        Logo = (ImageView) findViewById(R.id.postLogo);
+        GoodButton = (ImageButton) findViewById(R.id.GoodButton);
 
-        Bitmap LogoBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.logo);
+        Bitmap LogoBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.logo);
         Logo.setImageBitmap(LogoBitmap);
-        Bitmap GoodBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.board_best);
+        Bitmap GoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.board_best);
         GoodButton.setImageBitmap(GoodBitmap);
     }
+
 }

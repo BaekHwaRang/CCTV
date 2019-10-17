@@ -8,11 +8,11 @@ import java.util.Map;
 
 public class FirebasePost {
 
-    public long getP_id() {
+    public String getP_id() {
         return p_id;
     }
 
-    public void setP_id(long p_id) {
+    public void setP_id(String p_id) {
         this.p_id = p_id;
     }
 
@@ -50,11 +50,6 @@ public class FirebasePost {
         this.p_good = good;
     }
 
-    private long p_id;
-    private int p_good;
-    private String p_text;
-    private String p_title;
-    private String p_writer;
 
     public String getC_id() {
         return c_id;
@@ -71,6 +66,11 @@ public class FirebasePost {
     public void setC_index(long c_index) {
         this.c_index = c_index;
     }
+    private String p_id;
+    private int p_good;
+    private String p_text;
+    private String p_title;
+    private String p_writer;
 
     private String c_id;
     private long c_index;
@@ -84,7 +84,7 @@ public class FirebasePost {
         this.c_text = c_text;
         this.c_index = c_index;
     }
-    public FirebasePost(long p_id ,String title, String text,int good, String writer){  // post 생성자
+    public FirebasePost(String p_id ,String title, String text,int good, String writer){  // post 생성자
         this.p_id = p_id;
         this.p_text = text;
         this.p_title = title;
@@ -105,7 +105,7 @@ public class FirebasePost {
     public Map<String ,Object> toMapComment(){
         HashMap<String,Object> result = new HashMap<>();
         result.put("c_id",c_id);
-        result.put("c_index",c_index);
+        //result.put("c_index",c_index);
         result.put("c_text",c_text);
         return result;
     }
