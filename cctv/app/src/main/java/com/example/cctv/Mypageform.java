@@ -108,6 +108,12 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
         mContext = MainActivity.mContext;
 
+        NaverLogin();
+
+        return v;
+    }
+
+    public void NaverLogin() {
         /* 네이버 아이디로 로그인 */
         mOAuthLoginInstance = OAuthLogin.getInstance();
         mOAuthLoginInstance.showDevelopersLog(true);
@@ -128,27 +134,11 @@ public class Mypageform extends Fragment implements View.OnClickListener{
             mylogoutLayout.setVisibility(View.VISIBLE);
             myloginLayout.setVisibility(View.GONE);
         }
-        Toast.makeText(getActivity(), "mypage", Toast.LENGTH_SHORT).show();
-        return v;
     }
 
     @Override
     public void onResume() {
-        mOAuthLoginInstance = OAuthLogin.getInstance();
-        mOAuthLoginInstance.showDevelopersLog(true);
-        mOAuthLoginInstance.init(mContext,OAUTH_CLIENT_ID,OAUTH_CLIENT_SECRET,OAUTH_CLIENT_NAME);
-
-        if ((mOAuthLoginInstance.getAccessToken(getActivity()) != null)) {
-            myloginLayout = (LinearLayout) v.findViewById(R.id.mypage_login_layout);
-            mylogoutLayout = (LinearLayout) v.findViewById(R.id.mypage_logout_layout);
-            mylogoutLayout.setVisibility(View.GONE);
-            myloginLayout.setVisibility(View.VISIBLE);
-            new RequestApiTask().execute();
-        }
-        else {
-            mylogoutLayout.setVisibility(View.VISIBLE);
-            myloginLayout.setVisibility(View.GONE);
-        }
+        NaverLogin();
         switchCheck();
         super.onResume();
     }
