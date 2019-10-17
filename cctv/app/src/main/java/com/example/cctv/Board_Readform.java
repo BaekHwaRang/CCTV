@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,10 @@ public class Board_Readform extends Activity {
     TextView commentText;
     Button commentButton;
 
+    ListView listView;
+    ArrayList<CommentList> data = null;
+    CommentAdapter adapter;
+
     Map<String , Object> childUpdate = new HashMap<>();
     Map<String , Object> postValues = null;
     long maxid=0;
@@ -52,6 +57,7 @@ public class Board_Readform extends Activity {
         TextView title = (TextView)findViewById(R.id.boardTitleText);
         TextView Ds = (TextView)findViewById(R.id.boardDsText);
         TextView writer = (TextView)findViewById(R.id.boardWriterText);
+        listView = (ListView)findViewById(R.id.CommentList);
 
         commentText = (TextView)findViewById(R.id.comment_write);   //댓글 입력창
         commentButton = (Button)findViewById(R.id.comment_submit);  //댓글 등록 버튼
@@ -59,6 +65,15 @@ public class Board_Readform extends Activity {
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
         writer.setText(intent.getStringExtra("writer"));
+
+        data = new ArrayList<>();
+        CommentList commentList1 = new CommentList("wkdwnfl119@naver.com","네이버 연결좀 해주셈..");
+        CommentList commentList2 = new CommentList("kjund123@naver.com","쪼릇쪼릇?");
+        data.add(commentList1);
+        data.add(commentList2);
+        adapter = new CommentAdapter(getApplicationContext(),R.layout.comment_listview_layout,data);
+        listView.setAdapter(adapter);
+
 
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override

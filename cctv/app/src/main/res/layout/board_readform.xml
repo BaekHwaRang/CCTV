@@ -117,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@android:color/transparent"
                 android:ems="15"
                 android:hint="댓글을 입력해주세요"
                 android:inputType="text"
