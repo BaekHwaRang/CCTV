@@ -1,6 +1,7 @@
 package com.example.cctv;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,6 +54,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     LinearLayout mylogoutLayout;
     Button naverLogoutButton;
     ImageView profileImage;
+
+    String writerText;
 
     Switch lockSwitch;
 
@@ -122,6 +125,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
             mylogoutLayout.setVisibility(View.VISIBLE);
             myloginLayout.setVisibility(View.GONE);
         }
+        Toast.makeText(getActivity(), "mypage", Toast.LENGTH_SHORT).show();
         return v;
     }
 
@@ -213,6 +217,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                     String email = response.getString("email");
                     myNameText.setText(name);
                     myEmailText.setText(email);
+
+                    writerText = email;
                 }
                 else {
                     String name = response.getString("name");
@@ -220,6 +226,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                     String email = response.getString("email");
                     myNameText.setText(name);
                     myEmailText.setText(email);
+
+                    writerText = email;
 
                     /* 네이버 프로필 이미지 보여주기 */
                     Thread t = new Thread(new Runnable() {

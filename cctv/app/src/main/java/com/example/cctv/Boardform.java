@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -126,8 +127,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         });
         /* 리스트 아이템 연결 */
 
-        adapter  = new BoardAdapter(this,R.layout.board_listview_layout,data);
-        listView.setAdapter(adapter);
+//        adapter  = new BoardAdapter(this,R.layout.board_listview_layout,data);
+//        listView.setAdapter(adapter);
 
         /* 리스트뷰 아이템 클릭 */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -158,8 +159,10 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.board_writeButton:
+
                 Intent intent = new Intent(this,Board_Writeform.class);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

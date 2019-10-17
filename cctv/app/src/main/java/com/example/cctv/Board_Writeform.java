@@ -90,6 +90,8 @@ public class Board_Writeform extends AppCompatActivity {
                             Tv_title.setText("");
                             Tv_text.setText("");
 
+                            Intent intent3 = new Intent(getApplicationContext(),Boardform.class);
+                            startActivity(intent3);
                             finish();
                         }
 
