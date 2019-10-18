@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,6 +37,7 @@ public class Board_Readform extends Activity {
 
     ImageView Logo;
     ImageButton GoodButton;
+    boolean goodbutton = false;
 
     TextView commentText;
     Button commentButton;
@@ -67,6 +69,24 @@ public class Board_Readform extends Activity {
 
         commentText = (TextView) findViewById(R.id.comment_write);   //댓글 입력창
         commentButton = (Button) findViewById(R.id.comment_submit);  //댓글 등록 버튼
+
+        /* 따봉 */
+        GoodButton = (ImageButton)findViewById(R.id.GoodButton);
+        GoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(goodbutton == false)
+                {
+                    GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
+                    goodbutton = true;
+                }
+                else
+                {
+                    GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
+                    goodbutton = false;
+                }
+            }
+        });
 
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
@@ -112,8 +132,14 @@ public class Board_Readform extends Activity {
             String c_text;
             @Override
             public void onClick(View v) {
+
                 number=1;
-                if (commentText.getText() == null || commentText.getText().length() == 0) {
+                if(mydb.getResult().toString() == "[]") {
+                    Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+                else if (commentText.getText() == null || commentText.getText().length() == 0) {
                     Toast.makeText(Board_Readform.this, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     mContent.addChildEventListener(new ChildEventListener() {
@@ -174,6 +200,7 @@ public class Board_Readform extends Activity {
 
                 }
             }
+
         });
 
 
