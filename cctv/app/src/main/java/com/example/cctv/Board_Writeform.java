@@ -82,16 +82,13 @@ public class Board_Writeform extends AppCompatActivity {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             if(dataSnapshot.exists()){
-                                Log.e("count", String.valueOf(dataSnapshot.getChildrenCount()));
                                 for(int i=1;i<=dataSnapshot.getChildrenCount(); i++){
-                                    Log.e("id_list postNum",""+dataSnapshot.child(""+maxid).child("post").child("p_id").getValue());
                                     while(dataSnapshot.child(""+maxid).child("post").child("p_id").getValue()==null){
                                         maxid++;
                                     }
                                     maxid++;
                                 }
                             }
-                            Log.e("maxid", String.valueOf(maxid));
                             String id = String.valueOf(maxid);
 
                             FirebasePost post = new FirebasePost(id,Tv_title.getText().toString(),Tv_text.getText().toString(),0,Tv_writer.getText().toString());

@@ -57,14 +57,11 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         mContent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.e("ondatachange",""+dataSnapshot.child("id_list").getChildrenCount());
+
                 for(int i=1 ; i<= dataSnapshot.child("id_list").getChildrenCount(); i++){
-                    Log.e("number",""+number);
-                    Log.e("null",""+dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue());
                     while(dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue()==null)
                     {
                         number++;
-                        Log.e("null_Num", String.valueOf(number));
                     }
                     String pid = dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue().toString();
                     String ptitle = dataSnapshot.child("id_list").child(""+number).child("post").child("p_title").getValue().toString();
@@ -74,7 +71,6 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
 
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
-                    Log.e("pid",""+pid);
                     adapter  = new BoardAdapter(getApplicationContext(),R.layout.board_listview_layout,data);
                     listView.setAdapter(adapter);
                     number++;

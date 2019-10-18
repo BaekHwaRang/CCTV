@@ -40,6 +40,7 @@ public class Board_Readform extends Activity {
     TextView commentText;
     Button commentButton;
 
+    DBHelper mydb;
 
     Map<String, Object> childUpdate = new HashMap<>();
     Map<String, Object> postValues = null;
@@ -55,6 +56,8 @@ public class Board_Readform extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board_readform);
 
+        mydb = new DBHelper(getApplicationContext());
+
         Intent intent = getIntent();
 
         TextView title = (TextView) findViewById(R.id.boardTitleText);
@@ -69,7 +72,6 @@ public class Board_Readform extends Activity {
         Ds.setText(intent.getStringExtra("Ds"));
         writer.setText(intent.getStringExtra("writer"));
         p_id = intent.getStringExtra("index");
-        Log.e("read_pid", String.valueOf(p_id));
 
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference();
@@ -80,15 +82,12 @@ public class Board_Readform extends Activity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 number = 1;
                 if(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+5).getValue()==null){
-                    Log.e("if 확인","");
                 }
-                Log.e("1_댓글수",""+dataSnapshot.child("id_list").child("" + p_id).child("comment").getChildrenCount());
 
                 for(long i=1; i <= dataSnapshot.child("id_list").child("" + p_id).child("comment").getChildrenCount();i++){ // 댓글수 만큼
                     while(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).getValue()==null){ // 댓글 인덱스가 안맞으면
                         number++;
                     }
-                    Log.e("c_index"+number,"c_id : "+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_id").getValue()+" c_text : "+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_text").getValue());
                     String c_id = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_id").getValue());
                     String c_text = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_text").getValue());
                     String c_index = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).getValue());
@@ -120,7 +119,7 @@ public class Board_Readform extends Activity {
                     mContent.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            c_id = "고래";
+                            c_id = mydb.getResult().toString();
                             c_text = commentText.getText().toString();
                             if (dataSnapshot.child("" + p_id).getChildrenCount() == 1) {
                                 number=1;
@@ -144,7 +143,6 @@ public class Board_Readform extends Activity {
                                 mContent.updateChildren(childUpdate);
 
                                 commentText.setText("");
-                                Log.e("댓글삽입부","");
                             }
                             CommentList commentList1 = new CommentList(c_id,c_text);
                             adapter = new CommentAdapter(getApplicationContext(),R.layout.comment_listview_layout,data);
