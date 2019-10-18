@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -176,12 +177,11 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                 startActivity(ptintent);
                 break;
             case R.id.naverLogoutButton:
-                forceLogout();
                 mOAuthLoginInstance.logout(mContext);
+               mydb.delete(myNameText.getText().toString());
                 /*새로고침*/
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.detach(this).attach(this).commit();
-                mydb.delete(mydb.getResult().toString());
         }
     }
 

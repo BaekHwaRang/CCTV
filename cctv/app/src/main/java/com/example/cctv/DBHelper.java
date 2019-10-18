@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "WriterID.db";
-    public static final String RECIPE_TABLE_NAME = "writer";
-    public static final String RECIPE_COLUMN_ID = "id";
+    public static final String TABLE_NAME = "writer";
+    public static final String COLUMN_ID = "id";
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -51,10 +51,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update("writer",contentValues,"id = ? ",new String[]{id});
     }
 
-    public String delete(String id) {
+    public void delete(String id) {
         SQLiteDatabase db = getWritableDatabase();
 
-        return String.valueOf(db.delete("writer","id = ? ",new String[]{id}));
+        db.execSQL("DELETE FROM writer WHERE id= \"" + id + "\"");
     }
 
     public ArrayList getResult() {
@@ -64,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select * from writer", null);
         res.moveToFirst();
         while (res.isAfterLast() == false) {
-            arrayList.add(res.getString(res.getColumnIndex(RECIPE_COLUMN_ID)));
+            arrayList.add(res.getString(res.getColumnIndex(COLUMN_ID)));
             res.moveToNext();
         }
         return arrayList;
