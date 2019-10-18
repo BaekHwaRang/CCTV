@@ -136,8 +136,14 @@ public class Board_Readform extends Activity {
             String c_text;
             @Override
             public void onClick(View v) {
+
                 number=1;
-                if (commentText.getText() == null || commentText.getText().length() == 0) {
+                if(mydb.getResult().toString() == "[]") {
+                    Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+                else if (commentText.getText() == null || commentText.getText().length() == 0) {
                     Toast.makeText(Board_Readform.this, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     mContent.addChildEventListener(new ChildEventListener() {
@@ -199,6 +205,7 @@ public class Board_Readform extends Activity {
 
                 }
             }
+
         });
 
 
