@@ -127,10 +127,15 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.board_writeButton:
-
-                Intent intent = new Intent(this,Board_Writeform.class);
-                startActivity(intent);
-                finish();
+                if(mydb.getResult().toString() == "[]") {
+                    Toast.makeText(this, "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                else {
+                    Intent intent = new Intent(this, Board_Writeform.class);
+                    startActivity(intent);
+                    finish();
+                }
                 break;
         }
     }

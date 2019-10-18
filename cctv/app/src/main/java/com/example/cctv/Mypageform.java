@@ -124,14 +124,13 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         if (mOAuthLoginInstance.getAccessToken(getActivity()) != null)
         {
             loginCheck = true;
-            myNameText.setText("");
-            myEmailText.setText("");
             mylogoutLayout.setVisibility(View.GONE);
             myloginLayout.setVisibility(View.VISIBLE);
             new RequestApiTask().execute();
         }
         else
         {
+            mydb.delete(myNameText.getText().toString());
             loginCheck = false;
             mylogoutLayout.setVisibility(View.VISIBLE);
             myloginLayout.setVisibility(View.GONE);
@@ -204,8 +203,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     private class RequestApiTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {//작업이 실행되기 전에 먼저 실행.
-            myNameText.setText((String) "");//이름 란 비우기
-            myEmailText.setText((String) "");
         }
 
         @Override
