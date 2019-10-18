@@ -40,9 +40,11 @@ public class Board_Readform extends Activity {
     boolean goodbutton = false;
 
     TextView commentText;
+    TextView GoodCount;
     Button commentButton;
 
     DBHelper mydb;
+    goodHelper goodDB;
 
     Map<String, Object> childUpdate = new HashMap<>();
     Map<String, Object> postValues = null;
@@ -59,12 +61,14 @@ public class Board_Readform extends Activity {
         setContentView(R.layout.board_readform);
 
         mydb = new DBHelper(getApplicationContext());
+        goodDB = new goodHelper(getApplicationContext());
 
         Intent intent = getIntent();
 
         TextView title = (TextView) findViewById(R.id.boardTitleText);
         TextView Ds = (TextView) findViewById(R.id.boardDsText);
         TextView writer = (TextView) findViewById(R.id.boardWriterText);
+        GoodCount = (TextView) findViewById(R.id.GoodCountText);
         listView = (ListView)findViewById(R.id.CommentList);
 
         commentText = (TextView) findViewById(R.id.comment_write);   //댓글 입력창
@@ -72,31 +76,83 @@ public class Board_Readform extends Activity {
 
         /* 따봉 */
         GoodButton = (ImageButton)findViewById(R.id.GoodButton);
-        GoodButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(goodbutton == false)
-                {
-                    GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
-                    goodbutton = true;
-                }
-                else
-                {
-                    GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
-                    goodbutton = false;
-                }
-            }
-        });
+
 
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
         writer.setText(intent.getStringExtra("writer"));
         p_id = intent.getStringExtra("index");
+        GoodCount.setText(intent.getStringExtra("good"));
 
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference();
 
         data = new ArrayList<>();
+
+      /*  if(goodDB.getResult().toString() == "") {  // pid 와 같은 값이 있는지 체크 없으면 활성화 끄기
+            goodbutton = false;
+        }
+        else if(goodDB.getResult().toString()!=""){ // ... 있으면 활성화 켜기
+            goodbutton = true;
+        }*/
+
+        GoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContent.addChildEventListener(new ChildEventListener() {
+                    String temp;
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        if(goodbutton == false)
+                        {
+                            GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
+                            goodbutton = true;
+
+                            temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())+1);
+
+                            mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
+
+                            //goodDB.insert
+                            // 데이터 생성 -> good 데이터 +1 , 내부DB (pid 와 같은 값의 키를 생성)
+
+                        }
+                        else
+                        {
+                            GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
+                            goodbutton = false;
+
+                            temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())-1);
+                            mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
+                            //goodDB.delete();
+                            // 데이터 삭제 -> good 데이터 -1 , 내부DB (pid 와 같은 값을 제거)
+                            // pid == 게시판index(firebase 기준 p_id) , GoodCount.getText() == 게시판추천(firebase 기준 p_good)
+                        }
+                        GoodCount.setText(temp);
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+        // addValueEventListener 실행 후 변경시 실행, addListenerForSingleValueEvent 한번만 바로 실행
         mContent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

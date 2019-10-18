@@ -66,7 +66,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     String pid = dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue().toString();
                     String ptitle = dataSnapshot.child("id_list").child(""+number).child("post").child("p_title").getValue().toString();
                     String ptext = dataSnapshot.child("id_list").child(""+number).child("post").child("p_text").getValue().toString();
-                    int count = Integer.parseInt(dataSnapshot.child("id_list").child(""+number).child("post").child("p_good").getValue().toString());
+                    String count = dataSnapshot.child("id_list").child(""+number).child("post").child("p_good").getValue().toString();
                     String writer=dataSnapshot.child("id_list").child(""+number).child("post").child("p_writer").getValue().toString();
 
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
@@ -141,6 +141,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                 intent.putExtra("Ds",data.get(position).getDescription());
                 intent.putExtra("writer",data.get(position).getWriter());
                 intent.putExtra("index",data.get(position).getId());
+                intent.putExtra("good",data.get(position).getRank());
+                Log.e("good", String.valueOf(data.get(position).getRank()));
                 startActivity(intent);
             }
         });
