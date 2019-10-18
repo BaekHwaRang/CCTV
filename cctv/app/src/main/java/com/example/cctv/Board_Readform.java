@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,10 +37,12 @@ public class Board_Readform extends Activity {
 
     ImageView Logo;
     ImageButton GoodButton;
+    boolean goodbutton = false;
 
     TextView commentText;
     Button commentButton;
 
+    DBHelper mydb;
 
     Map<String, Object> childUpdate = new HashMap<>();
     Map<String, Object> postValues = null;
@@ -55,6 +58,8 @@ public class Board_Readform extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board_readform);
 
+        mydb = new DBHelper(getApplicationContext());
+
         Intent intent = getIntent();
 
         TextView title = (TextView) findViewById(R.id.boardTitleText);
@@ -64,6 +69,24 @@ public class Board_Readform extends Activity {
 
         commentText = (TextView) findViewById(R.id.comment_write);   //댓글 입력창
         commentButton = (Button) findViewById(R.id.comment_submit);  //댓글 등록 버튼
+
+        /* 따봉 */
+        GoodButton = (ImageButton)findViewById(R.id.GoodButton);
+        GoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(goodbutton == false)
+                {
+                    GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
+                    goodbutton = true;
+                }
+                else
+                {
+                    GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
+                    goodbutton = false;
+                }
+            }
+        });
 
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
@@ -120,7 +143,7 @@ public class Board_Readform extends Activity {
                     mContent.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            c_id = "고래";
+                            c_id = mydb.getResult().toString();
                             c_text = commentText.getText().toString();
                             if (dataSnapshot.child("" + p_id).getChildrenCount() == 1) {
                                 number=1;
