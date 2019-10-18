@@ -148,7 +148,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.3"
                 android:background="@android:color/background_light"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical"/>
 
             <LinearLayout
                 android:id="@+id/mypage_button_layout"

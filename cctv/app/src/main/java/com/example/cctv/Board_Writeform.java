@@ -29,8 +29,11 @@ public class Board_Writeform extends AppCompatActivity {
     ImageButton Subject;
     TextView Tv_title;
     TextView Tv_text;
+    TextView Tv_writer;
     Map<String , Object> childUpdate = new HashMap<>();
     Map<String , Object> postValues = null;
+
+    DBHelper mydb;
 
     long maxid=0;
     @Override
@@ -42,6 +45,11 @@ public class Board_Writeform extends AppCompatActivity {
         Subject = (ImageButton) findViewById(R.id.imageButton3);
         Tv_title = (TextView) findViewById(R.id.board_title_text);
         Tv_text = (TextView) findViewById(R.id.board_description_text);
+        Tv_writer = (TextView)findViewById(R.id.writerTextview);
+
+        mydb = new DBHelper(getApplicationContext());
+
+        Tv_writer.setText(mydb.getResult().toString());
 
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -79,7 +87,7 @@ public class Board_Writeform extends AppCompatActivity {
                             }
                             String id = String.valueOf(maxid+1);
 
-                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString(),Tv_text.getText().toString(),0,"익명이");
+                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString(),Tv_text.getText().toString(),0,Tv_writer.getText().toString());
                             postValues = post.toMap();
 
                             childUpdate.put("/id_list/"+id+"/post",postValues);
@@ -90,6 +98,7 @@ public class Board_Writeform extends AppCompatActivity {
 
                             Tv_title.setText("");
                             Tv_text.setText("");
+                            Tv_writer.setText("");
 
                             Intent intent3 = new Intent(getApplicationContext(),Boardform.class);
                             startActivity(intent3);

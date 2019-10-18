@@ -44,6 +44,8 @@ import java.net.URL;
 public class Mypageform extends Fragment implements View.OnClickListener{
     View v;
 
+    DBHelper mydb;
+
     MainActivity mainActivity;
     LinearLayout LockLayout;
     LinearLayout PatrolLayout;
@@ -54,8 +56,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     LinearLayout mylogoutLayout;
     Button naverLogoutButton;
     ImageView profileImage;
-
-    String writerText;
 
     Switch lockSwitch;
 
@@ -79,7 +79,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         v = inflater.inflate(R.layout.mypageform, container, false);
 
         mainActivity = new MainActivity();
-
         LockLayout = (LinearLayout)v.findViewById(R.id.mypage_lockLayout);
         LockLayout.setOnClickListener(this);
         PatrolLayout = (LinearLayout)v.findViewById(R.id.mypage_patrolLayout);
@@ -107,6 +106,8 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         });
 
         mContext = MainActivity.mContext;
+
+        mydb = new DBHelper(getContext());
 
         NaverLogin();
 
@@ -140,6 +141,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     public void onResume() {
         NaverLogin();
         switchCheck();
+        Toast.makeText(getActivity(), mydb.getResult().toString(), Toast.LENGTH_SHORT).show();
         super.onResume();
     }
 
@@ -179,6 +181,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                 /*새로고침*/
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.detach(this).attach(this).commit();
+                mydb.delete(mydb.getResult().toString());
         }
     }
 
@@ -223,9 +226,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                     String email = response.getString("email");
                     myNameText.setText(name);
                     myEmailText.setText(email);
-
-                    writerText = email;
-
+                    mydb.insert(name);
                 }
                 else {
                     String name = response.getString("name");
@@ -233,9 +234,7 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                     String email = response.getString("email");
                     myNameText.setText(name);
                     myEmailText.setText(email);
-
-                    writerText = email;
-
+                    mydb.insert(name);
                     /* 네이버 프로필 이미지 보여주기 */
                     Thread t = new Thread(new Runnable() {
                         @Override

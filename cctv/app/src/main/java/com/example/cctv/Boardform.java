@@ -34,6 +34,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     Map<String, Object> good_value = null;
     BoardAdapter adapter;
 
+    DBHelper mydb;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference("id_list");
         mContent.keepSynced(true);
+        mydb = new DBHelper(getApplicationContext());
 
         mContent.addValueEventListener(new ValueEventListener() {
             @Override
@@ -56,7 +59,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     String ptitle = filedata.child("post").child("p_title").getValue().toString();
                     String ptext = filedata.child("post").child("p_text").getValue().toString();
                     int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
-                    String writer= "익명이";  //자꾸 널값 뜸
+                    String writer= filedata.child("post").child("p_writer").getValue().toString();  //자꾸 널값 뜸
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
                     Log.e("pid",""+pid);
@@ -68,6 +71,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+
+
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -115,6 +120,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
             // 21 버전 이상일 때
             getWindow().setStatusBarColor(Color.BLACK);
         }
+
     }
 
     @Override
