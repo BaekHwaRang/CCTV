@@ -34,6 +34,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     Map<String, Object> good_value = null;
     BoardAdapter adapter;
 
+    DBHelper mydb;
+
     int number=1;
 
     @Override
@@ -49,6 +51,8 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference();
         mContent.keepSynced(true);
+
+        mydb = new DBHelper(getApplicationContext());
 
         mContent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -66,7 +70,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
                     String ptitle = dataSnapshot.child("id_list").child(""+number).child("post").child("p_title").getValue().toString();
                     String ptext = dataSnapshot.child("id_list").child(""+number).child("post").child("p_text").getValue().toString();
                     int count = Integer.parseInt(dataSnapshot.child("id_list").child(""+number).child("post").child("p_good").getValue().toString());
-                    String writer= "익명이";
+                    String writer=dataSnapshot.child("id_list").child(""+number).child("post").child("p_writer").getValue().toString();
 
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
@@ -162,10 +166,15 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.board_writeButton:
-
-                Intent intent = new Intent(this,Board_Writeform.class);
-                startActivity(intent);
-                finish();
+                if(mydb.getResult().toString() == "[]") {
+                    Toast.makeText(this, "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                else {
+                    Intent intent = new Intent(this, Board_Writeform.class);
+                    startActivity(intent);
+                    finish();
+                }
                 break;
         }
     }
