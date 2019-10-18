@@ -34,7 +34,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     Map<String, Object> good_value = null;
     BoardAdapter adapter;
 
-    DBHelper mydb;
+    int number=1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,31 +47,67 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
 
         data = new ArrayList<>();
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        final DatabaseReference mContent = mDatabase.getReference("id_list");
+        final DatabaseReference mContent = mDatabase.getReference();
         mContent.keepSynced(true);
-        mydb = new DBHelper(getApplicationContext());
 
-        mContent.addValueEventListener(new ValueEventListener() {
+        mContent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot filedata : dataSnapshot.getChildren()) {
-                    String pid = filedata.child("post").child("p_id").getValue().toString();
-                    String ptitle = filedata.child("post").child("p_title").getValue().toString();
-                    String ptext = filedata.child("post").child("p_text").getValue().toString();
-                    int count = Integer.parseInt(filedata.child("post").child("p_good").getValue().toString());
-                    String writer= filedata.child("post").child("p_writer").getValue().toString();  //자꾸 널값 뜸
+                Log.e("ondatachange",""+dataSnapshot.child("id_list").getChildrenCount());
+                for(int i=1 ; i<= dataSnapshot.child("id_list").getChildrenCount(); i++){
+                    Log.e("number",""+number);
+                    Log.e("null",""+dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue());
+                    while(dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue()==null)
+                    {
+                        number++;
+                        Log.e("null_Num", String.valueOf(number));
+                    }
+                    String pid = dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue().toString();
+                    String ptitle = dataSnapshot.child("id_list").child(""+number).child("post").child("p_title").getValue().toString();
+                    String ptext = dataSnapshot.child("id_list").child(""+number).child("post").child("p_text").getValue().toString();
+                    int count = Integer.parseInt(dataSnapshot.child("id_list").child(""+number).child("post").child("p_good").getValue().toString());
+                    String writer= "익명이";
+
                     BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
                     data.add(data1);
                     Log.e("pid",""+pid);
                     adapter  = new BoardAdapter(getApplicationContext(),R.layout.board_listview_layout,data);
                     listView.setAdapter(adapter);
+                    number++;
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
+        mContent.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
@@ -120,22 +156,16 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
             // 21 버전 이상일 때
             getWindow().setStatusBarColor(Color.BLACK);
         }
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.board_writeButton:
-                if(mydb.getResult().toString() == "[]") {
-                    Toast.makeText(this, "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                else {
-                    Intent intent = new Intent(this, Board_Writeform.class);
-                    startActivity(intent);
-                    finish();
-                }
+
+                Intent intent = new Intent(this,Board_Writeform.class);
+                startActivity(intent);
+                finish();
                 break;
         }
     }

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -77,21 +75,20 @@ public class Board_Readform extends Activity {
         final DatabaseReference mContent = mDatabase.getReference();
 
         data = new ArrayList<>();
-
-        mContent.addValueEventListener(new ValueEventListener() {
+        mContent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 number = 1;
                 if(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+5).getValue()==null){
                     Log.e("if 확인","");
                 }
+                Log.e("1_댓글수",""+dataSnapshot.child("id_list").child("" + p_id).child("comment").getChildrenCount());
 
-                for(long i=1; i <= dataSnapshot.child("id_list").child("" + p_id).child("comment").getChildrenCount();i++){
-                    while(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).getValue()==null){
+                for(long i=1; i <= dataSnapshot.child("id_list").child("" + p_id).child("comment").getChildrenCount();i++){ // 댓글수 만큼
+                    while(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).getValue()==null){ // 댓글 인덱스가 안맞으면
                         number++;
                     }
-                    Log.e("c_index"+number+" c_id",""+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_id").getValue());
-                    Log.e("c_index"+number+" c_text",""+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_text").getValue());
+                    Log.e("c_index"+number,"c_id : "+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_id").getValue()+" c_text : "+dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_text").getValue());
                     String c_id = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_id").getValue());
                     String c_text = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).child("c_text").getValue());
                     String c_index = String.valueOf(dataSnapshot.child("id_list").child("" + p_id).child("comment").child("c_index"+number).getValue());
@@ -103,13 +100,6 @@ public class Board_Readform extends Activity {
 
                     number++;
                 }
-
-
-               /* BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
-                    data.add(data1);
-                    Log.e("pid",""+pid);
-                    adapter  = new BoardAdapter(getApplicationContext(),R.layout.board_listview_layout,data);
-                    listView.setAdapter(adapter);*/
             }
 
             @Override
@@ -119,6 +109,8 @@ public class Board_Readform extends Activity {
         });
 
         commentButton.setOnClickListener(new View.OnClickListener() {
+            String c_id;
+            String c_text;
             @Override
             public void onClick(View v) {
                 number=1;
@@ -128,30 +120,10 @@ public class Board_Readform extends Activity {
                     mContent.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
+                            c_id = "고래";
+                            c_text = commentText.getText().toString();
                             if (dataSnapshot.child("" + p_id).getChildrenCount() == 1) {
-                                String c_id = "고래";
-                                String c_text = commentText.getText().toString();
-
-                                FirebasePost post = new FirebasePost(number, c_id, c_text);
-                                postValues = post.toMapComment();
-
-                                childUpdate.put("/id_list/" + p_id + "/comment/c_index" + number, postValues);
-
-                                mContent.updateChildren(childUpdate);
-
-
-                                commentText.setText("");
-                            } else {
-                                number = dataSnapshot.child("" + p_id).child("comment").getChildrenCount() + 1;
-
-                                Log.e("c_id", "" + dataSnapshot.child("" + p_id).child("comment").child("c_index" + number).child("c_id").getValue());
-                                Log.e("c_text", "" + dataSnapshot.child("" + p_id).child("comment").child("c_index" + number).child("c_text").getValue());
-                                Log.e("getText", commentText.getText().toString());
-
-                                String c_id = "고래";
-                                String c_text = commentText.getText().toString();
-
+                                number=1;
                                 FirebasePost post = new FirebasePost(number, c_id, c_text);
                                 postValues = post.toMapComment();
 
@@ -161,7 +133,23 @@ public class Board_Readform extends Activity {
 
 
                                 commentText.setText("");
+                            } else {
+                                number = dataSnapshot.child("" + p_id).child("comment").getChildrenCount() + 1;
+
+                                FirebasePost post = new FirebasePost(number, c_id, c_text);
+                                postValues = post.toMapComment();
+
+                                childUpdate.put("/id_list/" + p_id + "/comment/c_index" + (number), postValues);
+
+                                mContent.updateChildren(childUpdate);
+
+                                commentText.setText("");
+                                Log.e("댓글삽입부","");
                             }
+                            CommentList commentList1 = new CommentList(c_id,c_text);
+                            adapter = new CommentAdapter(getApplicationContext(),R.layout.comment_listview_layout,data);
+                            data.add(commentList1);
+                            listView.setAdapter(adapter);
                         }
 
 
@@ -199,18 +187,6 @@ public class Board_Readform extends Activity {
         Logo.setImageBitmap(LogoBitmap);
         Bitmap GoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.board_best);
         GoodButton.setImageBitmap(GoodBitmap);
-
-        View view = getWindow().getDecorView();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (view != null) {
-                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
-                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
-            }
-        }else if (Build.VERSION.SDK_INT >= 21) {
-            // 21 버전 이상일 때
-            getWindow().setStatusBarColor(Color.BLACK);
-        }
     }
 
 }

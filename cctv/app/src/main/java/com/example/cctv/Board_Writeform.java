@@ -29,13 +29,10 @@ public class Board_Writeform extends AppCompatActivity {
     ImageButton Subject;
     TextView Tv_title;
     TextView Tv_text;
-    TextView Tv_writer;
     Map<String , Object> childUpdate = new HashMap<>();
     Map<String , Object> postValues = null;
 
-    DBHelper mydb;
-
-    long maxid=0;
+    long maxid=1;
     @Override
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,11 +42,6 @@ public class Board_Writeform extends AppCompatActivity {
         Subject = (ImageButton) findViewById(R.id.imageButton3);
         Tv_title = (TextView) findViewById(R.id.board_title_text);
         Tv_text = (TextView) findViewById(R.id.board_description_text);
-        Tv_writer = (TextView)findViewById(R.id.writerTextview);
-
-        mydb = new DBHelper(getApplicationContext());
-
-        Tv_writer.setText(mydb.getResult().toString());
 
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -83,11 +75,19 @@ public class Board_Writeform extends AppCompatActivity {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             if(dataSnapshot.exists()){
-                                maxid=(dataSnapshot.getChildrenCount());
+                                Log.e("count", String.valueOf(dataSnapshot.getChildrenCount()));
+                                for(int i=1;i<=dataSnapshot.getChildrenCount(); i++){
+                                    Log.e("id_list postNum",""+dataSnapshot.child(""+maxid).child("post").child("p_id").getValue());
+                                    while(dataSnapshot.child(""+maxid).child("post").child("p_id").getValue()==null){
+                                        maxid++;
+                                    }
+                                    maxid++;
+                                }
                             }
-                            String id = String.valueOf(maxid+1);
+                            Log.e("maxid", String.valueOf(maxid));
+                            String id = String.valueOf(maxid);
 
-                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString(),Tv_text.getText().toString(),0,Tv_writer.getText().toString());
+                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString(),Tv_text.getText().toString(),0,"익명이");
                             postValues = post.toMap();
 
                             childUpdate.put("/id_list/"+id+"/post",postValues);
@@ -98,7 +98,6 @@ public class Board_Writeform extends AppCompatActivity {
 
                             Tv_title.setText("");
                             Tv_text.setText("");
-                            Tv_writer.setText("");
 
                             Intent intent3 = new Intent(getApplicationContext(),Boardform.class);
                             startActivity(intent3);
