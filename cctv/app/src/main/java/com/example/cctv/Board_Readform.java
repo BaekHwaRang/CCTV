@@ -103,7 +103,12 @@ public class Board_Readform extends Activity {
                     String temp;
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        if(goodbutton == false)
+                        if(mydb.getResult().toString() == "[]") {
+                            Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+
+                        else if(goodbutton == false)
                         {
                             GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
                             goodbutton = true;
