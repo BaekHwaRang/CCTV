@@ -60,8 +60,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
     Switch lockSwitch;
 
-    Boolean loginCheck;
-
     /* 네이버 로그인 */
     private static String OAUTH_CLIENT_ID = "fJECNAV766XxJKZ4AQU8";
     private static String OAUTH_CLIENT_SECRET = "aKa_jmn84Q";
@@ -115,6 +113,14 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         return v;
     }
 
+    @Override
+    public void onResume() {
+        NaverLogin();
+        switchCheck();
+        Toast.makeText(getActivity(), mydb.getResult().toString(), Toast.LENGTH_SHORT).show();
+        super.onResume();
+    }
+
     public void NaverLogin() {
         /* 네이버 아이디로 로그인 */
         mOAuthLoginInstance = OAuthLogin.getInstance();
@@ -123,7 +129,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
         if (mOAuthLoginInstance.getAccessToken(getActivity()) != null)
         {
-            loginCheck = true;
             mylogoutLayout.setVisibility(View.GONE);
             myloginLayout.setVisibility(View.VISIBLE);
             new RequestApiTask().execute();
@@ -131,18 +136,11 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         else
         {
             mydb.delete(myNameText.getText().toString());
-            loginCheck = false;
+            myNameText.setText("");
+            myEmailText.setText("");
             mylogoutLayout.setVisibility(View.VISIBLE);
             myloginLayout.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onResume() {
-        NaverLogin();
-        switchCheck();
-        Toast.makeText(getActivity(), mydb.getResult().toString(), Toast.LENGTH_SHORT).show();
-        super.onResume();
     }
 
     private void switchCheck(){
@@ -158,15 +156,15 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         }
     }
 
-    public void forceLogout() {
-        // 스레드로 돌려야 한다. 안 그러면 로그아웃 처리가 안되고 false를 반환한다.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mOAuthLoginInstance.logoutAndDeleteToken(mContext);
-            }
-        }).start();
-    }
+//    public void forceLogout() {
+//        // 스레드로 돌려야 한다. 안 그러면 로그아웃 처리가 안되고 false를 반환한다.
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mOAuthLoginInstance.logoutAndDeleteToken(mContext);
+//            }
+//        }).start();
+//    }
 
     @Override
     public void onClick(View v) {
@@ -229,9 +227,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                     String name = response.getString("name");
                     final String image = response.getString("profile_image");
                     String email = response.getString("email");
-                    myNameText.setText(name);
-                    myEmailText.setText(email);
-                    mydb.insert(name);
                     /* 네이버 프로필 이미지 보여주기 */
                     Thread t = new Thread(new Runnable() {
                         @Override
@@ -254,6 +249,9 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                         }
                     });
                     t.start();
+                    myNameText.setText(name);
+                    myEmailText.setText(email);
+                    mydb.insert(name);
                 }
             }
             catch (Exception e){

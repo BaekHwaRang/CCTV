@@ -53,7 +53,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
     private final int END_PROGRESSDIALOG = 101;
     ProgressDialog progressDialog = null;
     ProgressDialogHandler handler =null;
-    LinearLayout bottom_sheet;
 
     Button Search;
     TextView Addr; // 지도 input info
@@ -105,7 +104,7 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
                     Log.e("mLat",""+String.valueOf(mLat));
                     Log.e("mLng",""+String.valueOf(mLng));
                     Addr_Point = address.get(0).getLocality();
-                    Log.e("에러",""+Addr_Point);
+                    Log.e("--시--",""+Addr_Point);
                     String str_Addr = address.get(0).getAddressLine(0);
                     Log.e("str_addr",""+str_Addr);
                     //Addr_Point = address.get(0).getLocality(); 구단위자르기
@@ -314,7 +313,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
 
         @Override
         public boolean onMarkerClick(Marker marker) {
-            //bottom_sheet("View");
             String Marker_id = marker.getId();
             Marker_id = Marker_id.split("m")[1];
 
@@ -331,32 +329,6 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
             return false;
         }
 
-
-
-
-    /*public void bottom_sheet(final String msg){
-        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet);
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-
-            @Override
-            public void onStateChanged (@NonNull View view,int i){
-                if(msg == "View") {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-                }
-                if(msg == "Hidden")
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
-
-            @Override
-            public void onSlide (@NonNull View view,float v){
-
-            }
-
-
-
-        });
-    }*/
     private String jsonReadAll(Reader reader) throws IOException {
 
         StringBuilder sb = new StringBuilder();
@@ -422,91 +394,26 @@ public class Mapform extends Fragment implements OnMapReadyCallback, Runnable, G
         public void handleMessage(Message msg) {
             switch(msg.what) {
                 case START_PROGRESSDIALOG:
-                    /*if(progressDialog == null) {
+                    if(progressDialog == null) {
                         progressDialog = new ProgressDialog(context);
                         progressDialog.setTitle("불러오는중");
                         progressDialog.setMessage("잠시만 기다려주세요...");
                     }
-                    progressDialog.show();*/
+                    progressDialog.show();
                     if(!check){
-                   /* Mapform mp = new Mapform();
-                    mp.MapsApi(googleMap);*/
-                   Toast.makeText(getActivity(),"다시 입력해주세요.",Toast.LENGTH_SHORT).show();
+                    Mapform mp = new Mapform();
+                    mp.MapsApi(googleMap);
                     }
                     else
                         check=false;
                     break;
                 case END_PROGRESSDIALOG:
-                    /*if(progressDialog != null) {
+                    if(progressDialog != null) {
                         progressDialog.dismiss();
-                    }*/
+                    }
                     break;
 
             }
         }
     }
-
-    // 봉인된 AsyncTask //
-    /*public class jsonArray extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (pd.isShowing()) {
-                pd.dismiss();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            InputStream reader = null;
-            String resultSet = null;
-            InputStream is;
-            String jsonText = "";
-            try {
-                URL url = new URL("https://openapi.gg.go.kr/CCTV?key=89e53a9d5f2e4e1aa56f51784b9d2a40&pSize=1000&type=json&SIGUN_NM=" + Addr_Point + "&pIndex=" + page);
-                Log.e("페이지", String.valueOf(page));
-                Log.e("", Addr_Point);
-                Stop = true;
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(1500);
-                conn.setConnectTimeout(1500);
-
-                try {
-                    is = conn.getInputStream();
-                    BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                    Log.e("getData", String.valueOf(Stop));
-                    jsonText = jsonReadAll(rd);
-                    get_data = jsonText;
-
-                } catch (Exception e) {
-                    e.getStackTrace();
-                    // Log.e("error", e.getMessage() );
-                }
-
-            } catch (Exception e) {
-                e.getStackTrace();
-                Log.e("catch", "is error");
-            } finally {
-                if (reader != null) try {
-                    reader.close();
-                } catch (IOException ie) {
-                    ie.getStackTrace();
-                }
-            }
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(getContext());
-            pd.setMessage("Please wait");
-            pd.setCancelable(false);
-            pd.show();
-        }
-    }*/
-
 }
