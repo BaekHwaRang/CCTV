@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,12 +36,13 @@ public class Board_Writeform extends AppCompatActivity {
     Map<String , Object> postValues = null;
     DBHelper mydb;
     long maxid=1;
+    boolean check = false;
     @Override
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board_writeform);
-
+        check=true;
         Subject = (ImageButton) findViewById(R.id.imageButton3);
         Tv_title = (TextView) findViewById(R.id.board_title_text);
         Tv_text = (TextView) findViewById(R.id.board_description_text);
@@ -65,6 +67,7 @@ public class Board_Writeform extends AppCompatActivity {
         Subject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
                 final DatabaseReference mContent = mDatabase.getReference();
 
@@ -78,34 +81,50 @@ public class Board_Writeform extends AppCompatActivity {
                     return;
                 }
                 else {
+                    mContent.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                            @Override
+                            public void onCancelled (@NonNull DatabaseError databaseError){
+
+                            }
+                    });
                     mContent.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            if(dataSnapshot.exists()){
-                                for(int i=1;i<=dataSnapshot.getChildrenCount(); i++){
-                                    while(dataSnapshot.child(""+maxid).child("post").child("p_id").getValue()==null){
+                            if (check) {
+                                Log.e("Write", "");
+                                if (dataSnapshot.exists()) {
+                                    for (int i = 1; i <= dataSnapshot.getChildrenCount(); i++) {
+                                        while (dataSnapshot.child("" + maxid).child("post").child("p_id").getValue() == null) {
+                                            maxid++;
+                                        }
                                         maxid++;
                                     }
-                                    maxid++;
                                 }
+                                String id = String.valueOf(maxid);
+                                Log.e("error","check");
+                                FirebasePost post = new FirebasePost(id, Tv_title.getText().toString(), Tv_text.getText().toString(), 0, Tv_writer.getText().toString());
+                                postValues = post.toMap();
+
+                                childUpdate.put("/id_list/" + id + "/post", postValues);
+
+                                // childUpdate.put("/post_index/"+Tv_title.getText().toString(),postValues);
+
+                                mContent.updateChildren(childUpdate);
+                                Tv_title.setText("");
+                                Tv_text.setText("");
+                                Tv_writer.setText("");
+
+                                Log.e("Write 클릭","_");
+                                check=false;
+                                Intent intent3 = new Intent(getApplicationContext(), Boardform.class);
+                                startActivity(intent3);
+                                finish();
                             }
-                            String id = String.valueOf(maxid);
-
-                            FirebasePost post = new FirebasePost(id,Tv_title.getText().toString(),Tv_text.getText().toString(),0,Tv_writer.getText().toString());
-                            postValues = post.toMap();
-
-                            childUpdate.put("/id_list/"+id+"/post",postValues);
-
-                            // childUpdate.put("/post_index/"+Tv_title.getText().toString(),postValues);
-
-                            mContent.updateChildren(childUpdate);
-                            Tv_title.setText("");
-                            Tv_text.setText("");
-                            Tv_writer.setText("");
-
-                            Intent intent3 = new Intent(getApplicationContext(),Boardform.class);
-                            startActivity(intent3);
-                            finish();
                         }
 
                         @Override

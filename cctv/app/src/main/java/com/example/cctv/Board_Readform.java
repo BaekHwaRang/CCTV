@@ -50,11 +50,27 @@ public class Board_Readform extends Activity {
     Map<String, Object> postValues = null;
     long number = 1;
     String p_id;
+    String Pressed;
+    boolean check=false;
 
     ListView listView;
     ArrayList<CommentList> data = null;
     CommentAdapter adapter;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(Pressed.equals("Mainform"))
+        {
+            Log.e("맞나?", Pressed);
+        }
+        else{
+            Intent intent = new Intent(this, Boardform.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,61 +94,66 @@ public class Board_Readform extends Activity {
         GoodButton = (ImageButton)findViewById(R.id.GoodButton);
 
 
+
         title.setText(intent.getStringExtra("title"));
         Ds.setText(intent.getStringExtra("Ds"));
         writer.setText(intent.getStringExtra("writer"));
         p_id = intent.getStringExtra("index");
         GoodCount.setText(intent.getStringExtra("good"));
+        Pressed = (intent.getStringExtra("Pressed"));
+        Log.e("Pressed",Pressed);
+
+        if(goodDB.getData(p_id).toString() == "[]")
+        {
+            goodbutton = false;
+            GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
+        }
+        else
+        {
+            goodbutton = true;
+            GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
+        }
 
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference();
 
         data = new ArrayList<>();
 
-      /*  if(goodDB.getResult().toString() == "") {  // pid 와 같은 값이 있는지 체크 없으면 활성화 끄기
-            goodbutton = false;
-        }
-        else if(goodDB.getResult().toString()!=""){ // ... 있으면 활성화 켜기
-            goodbutton = true;
-        }*/
-
         GoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                check = true;
                 mContent.addChildEventListener(new ChildEventListener() {
                     String temp;
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        if(mydb.getResult().toString() == "[]") {
-                            Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
-                            finish();
+                        Log.e("Read","_");
+                        if(check) {
+                            if (mydb.getResult().toString() == "[]") {
+                                Toast.makeText(getApplicationContext(), "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else if (goodbutton == false) {
+                                GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
+                                goodbutton = true;
+
+                                goodDB.insert(p_id); // 버튼 상태 on
+
+                                temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString()) + 1);
+                                //temp = String.valueOf(Integer.parseInt(dataSnapshot.child("id_list").child(p_id).child("post").child("p_good").getValue().toString())+1);
+
+                                mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
+
+                            } else {
+                                GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
+                                goodbutton = false;
+                                goodDB.delete(p_id); // 버튼 상태 off
+
+                                temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString()) - 1);
+                                //temp = String.valueOf(Integer.parseInt(dataSnapshot.child("id_list").child(p_id).child("post").child("p_good").getValue().toString())-1);
+                                mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
+                            }
+                            GoodCount.setText(temp);
                         }
-
-                        else if(goodbutton == false)
-                        {
-                            GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
-                            goodbutton = true;
-
-                            temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())+1);
-
-                            mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
-
-                            //goodDB.insert
-                            // 데이터 생성 -> good 데이터 +1 , 내부DB (pid 와 같은 값의 키를 생성)
-
-                        }
-                        else
-                        {
-                            GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
-                            goodbutton = false;
-
-                            temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())-1);
-                            mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
-                            //goodDB.delete();
-                            // 데이터 삭제 -> good 데이터 -1 , 내부DB (pid 와 같은 값을 제거)
-                            // pid == 게시판index(firebase 기준 p_id) , GoodCount.getText() == 게시판추천(firebase 기준 p_good)
-                        }
-                        GoodCount.setText(temp);
                     }
 
                     @Override
@@ -158,7 +179,7 @@ public class Board_Readform extends Activity {
             }
         });
         // addValueEventListener 실행 후 변경시 실행, addListenerForSingleValueEvent 한번만 바로 실행
-        mContent.addListenerForSingleValueEvent(new ValueEventListener() {
+        mContent.addListenerForSingleValueEvent(new ValueEventListener() {  //addValueEventListener , addListenerForSingleValueEvent
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 number = 1;

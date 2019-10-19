@@ -37,7 +37,7 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
     DBHelper mydb;
 
     int number=1;
-
+    boolean check =false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,82 +51,43 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference();
         mContent.keepSynced(true);
+        Log.e("Board","create");
 
         mydb = new DBHelper(getApplicationContext());
 
-        mContent.addListenerForSingleValueEvent(new ValueEventListener() {
+        check=true;
+        mContent.addValueEventListener(new ValueEventListener() {  //addValueEventListener , addListenerForSingleValueEvent
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (check) {
+                    Log.e("form", "_"+check);
 
-                for(int i=1 ; i<= dataSnapshot.child("id_list").getChildrenCount(); i++){
-                    while(dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue()==null)
-                    {
+                    adapter=null;
+                    listView.setAdapter(adapter);
+                    for (int i = 1; i <= dataSnapshot.child("id_list").getChildrenCount(); i++) {
+                        while (dataSnapshot.child("id_list").child("" + number).child("post").child("p_id").getValue() == null) {
+                            number++;
+                        }
+                        String pid = dataSnapshot.child("id_list").child("" + number).child("post").child("p_id").getValue().toString();
+                        String ptitle = dataSnapshot.child("id_list").child("" + number).child("post").child("p_title").getValue().toString();
+                        String ptext = dataSnapshot.child("id_list").child("" + number).child("post").child("p_text").getValue().toString();
+                        String count = dataSnapshot.child("id_list").child("" + number).child("post").child("p_good").getValue().toString();
+                        String writer = dataSnapshot.child("id_list").child("" + number).child("post").child("p_writer").getValue().toString();
+
+                        BoardList data1 = new BoardList(count, pid, ptitle, ptext, writer);
+                        data.add(data1);
+                        adapter = new BoardAdapter(getApplicationContext(), R.layout.board_listview_layout, data);
+                        listView.setAdapter(adapter);
                         number++;
                     }
-                    String pid = dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue().toString();
-                    String ptitle = dataSnapshot.child("id_list").child(""+number).child("post").child("p_title").getValue().toString();
-                    String ptext = dataSnapshot.child("id_list").child(""+number).child("post").child("p_text").getValue().toString();
-                    String count = dataSnapshot.child("id_list").child(""+number).child("post").child("p_good").getValue().toString();
-                    String writer=dataSnapshot.child("id_list").child(""+number).child("post").child("p_writer").getValue().toString();
-
-                    BoardList data1 = new BoardList(count,pid,ptitle,ptext,writer);
-                    data.add(data1);
-                    adapter  = new BoardAdapter(getApplicationContext(),R.layout.board_listview_layout,data);
-                    listView.setAdapter(adapter);
-                    number++;
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        mContent.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
 
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    Log.d("", "connected");
-
-                } else {
-                    Log.d("", "not connected");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("", "Listener was cancelled");
-            }
-        });
         /* 리스트 아이템 연결 */
 
 //        adapter  = new BoardAdapter(this,R.layout.board_listview_layout,data);
@@ -136,14 +97,16 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
+                check =false;
                 Intent intent = new Intent(getApplicationContext(),Board_Readform.class);
                 intent.putExtra("title",data.get(position).getTitle());
                 intent.putExtra("Ds",data.get(position).getDescription());
                 intent.putExtra("writer",data.get(position).getWriter());
                 intent.putExtra("index",data.get(position).getId());
                 intent.putExtra("good",data.get(position).getRank());
-                Log.e("good", String.valueOf(data.get(position).getRank()));
+                intent.putExtra("Pressed","Boardform");
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -165,10 +128,12 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.board_writeButton:
                 if(mydb.getResult().toString() == "[]") {
+                    check =false;
                     Toast.makeText(this, "로그인 후 이용해주세요", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else {
+                    check =false;
                     Intent intent = new Intent(this, Board_Writeform.class);
                     startActivity(intent);
                     finish();
