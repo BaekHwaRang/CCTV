@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -59,6 +60,9 @@ public class Mypageform extends Fragment implements View.OnClickListener{
     ImageView profileImage;
 
     Switch lockSwitch;
+    public static final String PREFERENCES_NAME = "lock_switch";
+    private static final boolean DEFAULT_VALUE_BOOLEAN = false;
+
 
     /* 네이버 로그인 */
     private static String OAUTH_CLIENT_ID = "fJECNAV766XxJKZ4AQU8";
@@ -95,7 +99,10 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         naverLogoutButton = (Button)v.findViewById(R.id.naverLogoutButton);
         naverLogoutButton.setOnClickListener(this);
 
+        mContext = MainActivity.mContext;
+
         lockSwitch = (Switch)v.findViewById(R.id.lockSwitch);
+        Lock_check();
         switchCheck();
         lockSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +110,6 @@ public class Mypageform extends Fragment implements View.OnClickListener{
                 switchCheck();
             }
         });
-
-        mContext = MainActivity.mContext;
 
         mydb = new DBHelper(getContext());
 
@@ -120,6 +125,19 @@ public class Mypageform extends Fragment implements View.OnClickListener{
         Toast.makeText(getActivity(), mydb.getResult().toString(), Toast.LENGTH_SHORT).show();
         super.onResume();
     }
+
+    /* 잠금화면 스위치 체크 */
+    public void Lock_check() {
+        Boolean switch_value = getBoolean(mContext,"switch");
+
+        if(switch_value == true){
+            lockSwitch.setChecked(true);
+        }
+        else{
+            lockSwitch.setChecked(false);
+        }
+    }
+
 
     public void NaverLogin() {
         /* 네이버 아이디로 로그인 */
@@ -145,16 +163,43 @@ public class Mypageform extends Fragment implements View.OnClickListener{
 
     private void switchCheck(){
 
+        Boolean switch_value = getBoolean(mContext,"switch");
+
         if(lockSwitch.isChecked()) {
             ((MainActivity)MainActivity.mContext).checkPermission();
+            setBoolean(mContext,"switch",true);
             Intent intent = new Intent(getActivity(), ScreenService.class);
             getActivity().startService(intent);
         }
         else{
+            setBoolean(mContext,"switch",false);
             Intent intent = new Intent(getActivity(), ScreenService.class);
             getActivity().stopService(intent);
         }
     }
+
+
+
+    /* 스위치 값 저장 */
+    private static SharedPreferences getPreferences(Context context) {
+        return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static void setBoolean(Context context, String key, boolean value) {
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+    public static boolean getBoolean(Context context, String key) {
+        SharedPreferences prefs = getPreferences(context);
+        boolean value = prefs.getBoolean(key, DEFAULT_VALUE_BOOLEAN);
+        return value;
+    }
+
+
+
 
 //    public void forceLogout() {
 //        // 스레드로 돌려야 한다. 안 그러면 로그아웃 처리가 안되고 false를 반환한다.

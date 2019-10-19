@@ -28,7 +28,7 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
 //    public boolean result = false;
 
     ImageView deco;
-    ImageView deco2;
+    ImageButton deco2;
     ImageButton callButton;
     ImageButton bellButton;
     public MediaPlayer mediaPlayer;
@@ -48,6 +48,7 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
 
         callButton.setOnClickListener(this);
         bellButton.setOnClickListener(this);
+        deco2.setOnClickListener(this);
 
         Bitmap DecoBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.deco);
         deco.setImageBitmap(DecoBitmap);
@@ -95,6 +96,8 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
                     noiseOn();
                 }
                 break;
+            case R.id.deco2:
+                finish();
         }
     }
 
