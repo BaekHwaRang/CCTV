@@ -69,6 +69,7 @@ public class Board_Readform extends Activity {
             startActivity(intent);
             finish();
         }
+        Mainform.main_check = false;
 
     }
     @Override

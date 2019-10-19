@@ -59,7 +59,9 @@ public class Mainform extends Fragment implements View.OnClickListener{
 
     String best_index[] ;
     String IntentPUSH[][];
-    boolean check = false;
+    public static boolean main_check = false;
+    long err=3;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,12 +89,12 @@ public class Mainform extends Fragment implements View.OnClickListener{
         final DatabaseReference mContent = mDatabase.getReference();
 
         IntentPUSH = new String[][]{{"", "", "","",""},{"","","","",""},{"","","","",""}};
-        check=true;
-        mContent.addValueEventListener(new ValueEventListener() {
+        main_check=true;
+        mContent.addValueEventListener(new ValueEventListener() { // addValueEventListener , addListenerForSingleValueEvent
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (check) {
-                    Log.e("메인 폼 시작", "_"+check);
+                if (true) {
+                    Log.e("메인 폼 시작", "_"+main_check);
                     int p_count = (int) dataSnapshot.child("id_list").getChildrenCount();
                     int number = 1;
                     int best = -1;
@@ -131,18 +133,24 @@ public class Mainform extends Fragment implements View.OnClickListener{
                         number++;
                     }
 
+                    if(dataSnapshot.child("id_list").getChildrenCount() > 0)
+                    button_One.setText(""+dataSnapshot.child("id_list").child(best_index[0]).child("post").child("p_title").getValue().toString());
+                    if(dataSnapshot.child("id_list").getChildrenCount() > 1)
+                    button_Two.setText(""+dataSnapshot.child("id_list").child(best_index[1]).child("post").child("p_title").getValue().toString());
+                    if(dataSnapshot.child("id_list").getChildrenCount() > 2)
+                    button_three.setText(""+dataSnapshot.child("id_list").child(best_index[2]).child("post").child("p_title").getValue().toString());
 
-                    button_One.setText(dataSnapshot.child("id_list").child(best_index[0]).child("post").child("p_title").getValue().toString());
-                    button_Two.setText(dataSnapshot.child("id_list").child(best_index[1]).child("post").child("p_title").getValue().toString());
-                    button_three.setText(dataSnapshot.child("id_list").child(best_index[2]).child("post").child("p_title").getValue().toString());
-
-                    for (int i = 0; i < 3; i++) {
+                    if(dataSnapshot.child("id_list").getChildrenCount() <= 3) {
+                        err = dataSnapshot.child("id_list").getChildrenCount();
+                    }
+                    for (int i = 0; i < err; i++) {
                         IntentPUSH[i][0] = dataSnapshot.child("id_list").child(best_index[i]).child("post").child("p_title").getValue().toString();
                         IntentPUSH[i][1] = dataSnapshot.child("id_list").child(best_index[i]).child("post").child("p_text").getValue().toString();
                         IntentPUSH[i][2] = dataSnapshot.child("id_list").child(best_index[i]).child("post").child("p_writer").getValue().toString();
                         IntentPUSH[i][3] = dataSnapshot.child("id_list").child(best_index[i]).child("post").child("p_id").getValue().toString();
                         IntentPUSH[i][4] = dataSnapshot.child("id_list").child(best_index[i]).child("post").child("p_good").getValue().toString();
                     }
+
                 }
             }
             @Override
@@ -156,14 +164,15 @@ public class Mainform extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.boardButton:
-                check=false;
+                main_check=false;
                 Intent intent_board = new Intent(getActivity(),Boardform.class);
                 startActivity(intent_board);
                 break;
             case R.id.newsButton:
-                check=false;
+                main_check=false;
                 Intent intent_news = new Intent(getActivity(),Newsform.class);
                 startActivity(intent_news);
                 break;
@@ -189,40 +198,46 @@ public class Mainform extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.button4:
-                Intent intent_best1 = new Intent(getContext(), Board_Readform.class);
+                if(err>=1) {
+                    Intent intent_best1 = new Intent(getContext(), Board_Readform.class);
 
-                check=false;
-                intent_best1.putExtra("title",IntentPUSH[0][0]);
-                intent_best1.putExtra("Ds",IntentPUSH[0][1]);
-                intent_best1.putExtra("writer",IntentPUSH[0][2]);
-                intent_best1.putExtra("index",IntentPUSH[0][3]);
-                intent_best1.putExtra("good",IntentPUSH[0][4]);
-                intent_best1.putExtra("Pressed","Mainform");
-                startActivity(intent_best1);
+                    main_check = false;
+                    intent_best1.putExtra("title", IntentPUSH[0][0]);
+                    intent_best1.putExtra("Ds", IntentPUSH[0][1]);
+                    intent_best1.putExtra("writer", IntentPUSH[0][2]);
+                    intent_best1.putExtra("index", IntentPUSH[0][3]);
+                    intent_best1.putExtra("good", IntentPUSH[0][4]);
+                    intent_best1.putExtra("Pressed", "Mainform");
+                    startActivity(intent_best1);
+                }
                 break;
             case R.id.button3:
-                Intent intent_best2 = new Intent(getContext(), Board_Readform.class);
+                if(err>=2) {
+                    Intent intent_best2 = new Intent(getContext(), Board_Readform.class);
 
-                check=false;
-                intent_best2.putExtra("title",IntentPUSH[1][0]);
-                intent_best2.putExtra("Ds",IntentPUSH[1][1]);
-                intent_best2.putExtra("writer",IntentPUSH[1][2]);
-                intent_best2.putExtra("index",IntentPUSH[1][3]);
-                intent_best2.putExtra("good",IntentPUSH[1][4]);
-                intent_best2.putExtra("Pressed","Mainform");
-                startActivity(intent_best2);
+                    main_check = false;
+                    intent_best2.putExtra("title", IntentPUSH[1][0]);
+                    intent_best2.putExtra("Ds", IntentPUSH[1][1]);
+                    intent_best2.putExtra("writer", IntentPUSH[1][2]);
+                    intent_best2.putExtra("index", IntentPUSH[1][3]);
+                    intent_best2.putExtra("good", IntentPUSH[1][4]);
+                    intent_best2.putExtra("Pressed", "Mainform");
+                    startActivity(intent_best2);
+                }
                 break;
             case R.id.button:
-                Intent intent_best3 = new Intent(getContext(), Board_Readform.class);
+                if(err>=3) {
+                    Intent intent_best3 = new Intent(getContext(), Board_Readform.class);
 
-                check=false;
-                intent_best3.putExtra("title",IntentPUSH[2][0]);
-                intent_best3.putExtra("Ds",IntentPUSH[2][1]);
-                intent_best3.putExtra("writer",IntentPUSH[2][2]);
-                intent_best3.putExtra("index",IntentPUSH[2][3]);
-                intent_best3.putExtra("good",IntentPUSH[2][4]);
-                intent_best3.putExtra("Pressed","Mainform");
-                startActivity(intent_best3);
+                    main_check = false;
+                    intent_best3.putExtra("title", IntentPUSH[2][0]);
+                    intent_best3.putExtra("Ds", IntentPUSH[2][1]);
+                    intent_best3.putExtra("writer", IntentPUSH[2][2]);
+                    intent_best3.putExtra("index", IntentPUSH[2][3]);
+                    intent_best3.putExtra("good", IntentPUSH[2][4]);
+                    intent_best3.putExtra("Pressed", "Mainform");
+                    startActivity(intent_best3);
+                }
                 break;
         }
     }

@@ -38,6 +38,15 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
 
     int number=1;
     boolean check =false;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        check=false;
+        Mainform.main_check = true;
+        Log.e("백프레시드"," on");
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,29 +65,38 @@ public class Boardform extends AppCompatActivity implements View.OnClickListener
         mydb = new DBHelper(getApplicationContext());
 
         check=true;
+        adapter=null;
+        listView.setAdapter(adapter);
         mContent.addValueEventListener(new ValueEventListener() {  //addValueEventListener , addListenerForSingleValueEvent
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (check) {
+                if (true) {
                     Log.e("form", "_"+check);
 
-                    adapter=null;
-                    listView.setAdapter(adapter);
                     for (int i = 1; i <= dataSnapshot.child("id_list").getChildrenCount(); i++) {
-                        while (dataSnapshot.child("id_list").child("" + number).child("post").child("p_id").getValue() == null) {
+                        while (dataSnapshot.child("id_list").getValue() == null) {
+                            number++;
+                            Log.e("2", "" + dataSnapshot.getValue());
+                        }
+                        if(dataSnapshot.child("id_list").child(""+number).child("post").child("p_id").getValue() == null){
+
+                        }
+                        else {
+                            String pid = dataSnapshot.child("id_list").child("" + number).child("post").child("p_id").getValue().toString();
+                            String ptitle = dataSnapshot.child("id_list").child("" + number).child("post").child("p_title").getValue().toString();
+                            String ptext = dataSnapshot.child("id_list").child("" + number).child("post").child("p_text").getValue().toString();
+                            String count = dataSnapshot.child("id_list").child("" + number).child("post").child("p_good").getValue().toString();
+                            String writer = dataSnapshot.child("id_list").child("" + number).child("post").child("p_writer").getValue().toString();
+                            Log.e("3", "3");
+                            BoardList data1 = new BoardList(count, pid, ptitle, ptext, writer);
+                            data.add(data1);
+                            adapter = new BoardAdapter(getApplicationContext(), R.layout.board_listview_layout, data);
+
+
+                            listView.setAdapter(adapter);
                             number++;
                         }
-                        String pid = dataSnapshot.child("id_list").child("" + number).child("post").child("p_id").getValue().toString();
-                        String ptitle = dataSnapshot.child("id_list").child("" + number).child("post").child("p_title").getValue().toString();
-                        String ptext = dataSnapshot.child("id_list").child("" + number).child("post").child("p_text").getValue().toString();
-                        String count = dataSnapshot.child("id_list").child("" + number).child("post").child("p_good").getValue().toString();
-                        String writer = dataSnapshot.child("id_list").child("" + number).child("post").child("p_writer").getValue().toString();
-
-                        BoardList data1 = new BoardList(count, pid, ptitle, ptext, writer);
-                        data.add(data1);
-                        adapter = new BoardAdapter(getApplicationContext(), R.layout.board_listview_layout, data);
-                        listView.setAdapter(adapter);
-                        number++;
                     }
                 }
             }
