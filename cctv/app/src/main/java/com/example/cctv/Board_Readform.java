@@ -83,6 +83,18 @@ public class Board_Readform extends Activity {
         writer.setText(intent.getStringExtra("writer"));
         p_id = intent.getStringExtra("index");
         GoodCount.setText(intent.getStringExtra("good"));
+        Toast.makeText(getApplicationContext(), goodDB.getData(p_id).toString(), Toast.LENGTH_SHORT).show();
+
+        if(goodDB.getData(p_id).toString() == "[]")
+        {
+            goodbutton = false;
+            GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
+        }
+        else
+        {
+            goodbutton = true;
+            GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
+        }
 
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference mContent = mDatabase.getReference();
@@ -112,7 +124,7 @@ public class Board_Readform extends Activity {
                         {
                             GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
                             goodbutton = true;
-
+                            goodDB.insert(p_id);
                             temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())+1);
 
                             mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
@@ -125,6 +137,7 @@ public class Board_Readform extends Activity {
                         {
                             GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
                             goodbutton = false;
+                            goodDB.delete(p_id);
 
                             temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())-1);
                             mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
@@ -156,6 +169,8 @@ public class Board_Readform extends Activity {
                     }
                 });
             }
+
+
         });
         // addValueEventListener 실행 후 변경시 실행, addListenerForSingleValueEvent 한번만 바로 실행
         mContent.addListenerForSingleValueEvent(new ValueEventListener() {
