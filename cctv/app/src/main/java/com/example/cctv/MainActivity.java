@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         Mypageform mypageform = new Mypageform();
-        mypageform.forceLogout();
+//        mypageform.forceLogout();
         super.onDestroy();
     }
 

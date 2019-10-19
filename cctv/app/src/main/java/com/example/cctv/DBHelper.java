@@ -37,10 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public void insert(String id) {
         // 읽고 쓰기가 가능하게 DB 열기
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("id",id);
-        // DB에 입력한 값으로 행 추가
-        db.insert("writer",null,contentValues);
+
+        db.execSQL("INSERT INTO writer (id) VALUES ('"+id+"')");
     }
 
     public void update(String id) {
