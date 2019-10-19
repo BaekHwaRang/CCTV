@@ -89,12 +89,16 @@ public class Board_Readform extends Activity {
 
         data = new ArrayList<>();
 
-      /*  if(goodDB.getResult().toString() == "") {  // pid 와 같은 값이 있는지 체크 없으면 활성화 끄기
+        if(goodDB.getData(p_id).toString() == "[]")
+        {
             goodbutton = false;
+            GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
         }
-        else if(goodDB.getResult().toString()!=""){ // ... 있으면 활성화 켜기
+        else
+        {
             goodbutton = true;
-        }*/
+            GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
+        }
 
         GoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +116,7 @@ public class Board_Readform extends Activity {
                         {
                             GoodButton.setBackgroundColor(Color.parseColor("#F9E958"));
                             goodbutton = true;
+                            goodDB.insert(p_id);
 
                             temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())+1);
 
@@ -125,12 +130,10 @@ public class Board_Readform extends Activity {
                         {
                             GoodButton.setBackgroundColor(Color.parseColor("#EAEAEA"));
                             goodbutton = false;
+                            goodDB.delete(p_id);
 
                             temp = String.valueOf(Integer.parseInt(dataSnapshot.child(p_id).child("post").child("p_good").getValue().toString())-1);
                             mContent.child("id_list").child(p_id).child("post").child("p_good").setValue(temp);
-                            //goodDB.delete();
-                            // 데이터 삭제 -> good 데이터 -1 , 내부DB (pid 와 같은 값을 제거)
-                            // pid == 게시판index(firebase 기준 p_id) , GoodCount.getText() == 게시판추천(firebase 기준 p_good)
                         }
                         GoodCount.setText(temp);
                     }
